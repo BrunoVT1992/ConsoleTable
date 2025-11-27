@@ -260,6 +260,19 @@ table.AddRow("Widget C", "5", "$100.00");
 Console.WriteLine(table.ToString());
 ```
 
+Output:
+```
+┌────────────┬────────────┬───────────┐
+│  Item      │  Quantity  │  Price    │
+├────────────┼────────────┼───────────┤
+│  Widget A  │        50  │   $10.00  │
+├────────────┼────────────┼───────────┤
+│  Widget B  │      1000  │    $5.50  │
+├────────────┼────────────┼───────────┤
+│  Widget C  │         5  │  $100.00  │
+└────────────┴────────────┴───────────┘
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
