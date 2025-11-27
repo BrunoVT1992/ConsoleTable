@@ -2,6 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    
+    <!-- NuGet Package Metadata -->
+    <PackageId>ConsoleTable</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Bruno Van Thournout</Authors>
+    <Description>A library for creating formatted console tables with customizable headers, rows, and alignment options.</Description>
+    <PackageProjectUrl>https://github.com/BrunoVT1992/ConsoleTable</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/BrunoVT1992/ConsoleTable</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>console;table;formatting;cli</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
 </Project>
