@@ -5,10 +5,10 @@ A lightweight .NET library for creating beautifully formatted console tables wit
 ## Features
 
 - 📊 Create formatted tables with headers and data rows
+- 🎨 Unicode box-drawing characters for clean borders
+- 🔄 Automatic column width calculation
 - 📏 Configurable cell padding
 - ↔️ Text alignment options (left/right) for headers and rows
-- 🔄 Automatic column width calculation
-- 🎨 Unicode box-drawing characters for clean borders
 - 📐 Support for varying column counts across rows
 
 ## Installation
