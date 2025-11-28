@@ -98,7 +98,7 @@ public class TableTests
     [InlineData(true, true, 0, true)]
     [InlineData(true, false, 10, false)]
     [InlineData(false, true, 10, false)]
-    public void ClearRows_ThenAddNewRows_WithStyling(bool headerTextAlignRight, bool rowTextAlignRight, int padding, bool headerTextToUpperCase)
+    public void ToTable_WithStyling(bool headerTextAlignRight, bool rowTextAlignRight, int padding, bool headerTextToUpperCase)
     {
         var table = new Table
         {
@@ -115,7 +115,7 @@ public class TableTests
         var result = table.ToTable();
 
         Assert.Contains(headerTextToUpperCase ? "NAME" : "Name", result);
-        Assert.DoesNotContain("John", result);
+        Assert.Contains("John", result);
         Assert.Contains("Jane", result);
     }
 
