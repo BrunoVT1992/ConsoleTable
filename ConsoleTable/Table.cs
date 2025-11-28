@@ -70,6 +70,9 @@ public class Table
         }
     }
 
+    /// <summary>
+    /// Sets the headers of the table. Overwrites them each time.
+    /// </summary>
     public Table SetHeaders(params string[]? headers)
     {
         _headers = headers;
@@ -77,6 +80,9 @@ public class Table
         return this;
     }
 
+    /// <summary>
+    /// Adds a new row to the table
+    /// </summary>
     public Table AddRow(params string[] row)
     {
         _rows.Add(row);
@@ -84,6 +90,9 @@ public class Table
         return this;
     }
 
+    /// <summary>
+    /// Clears all the rows from the table
+    /// </summary>
     public Table ClearRows()
     {
         _rows.Clear();
@@ -237,6 +246,9 @@ public class Table
         _tableCache = null;
     }
 
+    /// <summary>
+    /// Generates the formatted table to a string
+    /// </summary>
     public string ToTable()
     {
         if (!string.IsNullOrEmpty(_tableCache))
