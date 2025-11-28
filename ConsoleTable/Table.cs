@@ -16,26 +16,34 @@ public class Table
     private const char HorizontalLine = '─';
     private const string VerticalLine = "│";
 
-    private string[] _headers;
-    private List<string[]> _rows = new List<string[]>();
+    private string[]? _headers;
+    private List<string[]> _rows = [];
+    private string? _tableCache;
 
     public int Padding { get; set; } = 1;
     public bool HeaderTextAlignRight { get; set; }
+    public bool HeaderTextToUpperCase { get; set; } = false;
     public bool RowTextAlignRight { get; set; }
 
-    public void SetHeaders(params string[] headers)
+    public Table SetHeaders(params string[]? headers)
     {
-        _headers = headers;
+        _headers = headers?.Select(x => HeaderTextToUpperCase ? x.ToUpper() : x)?.ToArray();
+        _tableCache = null;
+        return this;
     }
 
-    public void AddRow(params string[] row)
+    public Table AddRow(params string[] row)
     {
         _rows.Add(row);
+        _tableCache = null;
+        return this;
     }
 
-    public void ClearRows()
+    public Table ClearRows()
     {
         _rows.Clear();
+        _tableCache = null;
+        return this;
     }
 
     private int[] GetMaxCellWidths(List<string[]> table)
@@ -179,8 +187,11 @@ public class Table
         return formattedTable;
     }
 
-    public override string ToString()
+    public string ToTable()
     {
+        if (!string.IsNullOrEmpty(_tableCache))
+            return _tableCache;
+
         var table = new List<string[]>();
 
         var firstRowIsHeader = false;
@@ -191,15 +202,22 @@ public class Table
         }
 
         if (_rows?.Any() == true)
-            table.AddRange(_rows);
+            foreach (var row in _rows)
+            {
+                //Weird behaviour with empty rows
+                if ((row == null || row.Count() <= 0) && _headers?.Count() > 0)
+                    table.AddRange([" "]);
+                else
+                    table.Add(row!);
+            }
 
         if (!table.Any())
             return string.Empty;
 
         var formattedTable = new StringBuilder();
 
-        var previousRow = table.FirstOrDefault();
-        var nextRow = table.FirstOrDefault();
+        var previousRow = table.First();
+        var nextRow = table.First();
 
         int[] maximumCellWidths = GetMaxCellWidths(table);
 
@@ -231,6 +249,13 @@ public class Table
 
         formattedTable = CreateBottomLine(maximumCellWidths, previousRow.Count(), formattedTable);
 
-        return formattedTable.ToString();
+        _tableCache = formattedTable.ToString();
+
+        return _tableCache;
+    }
+
+    public override string ToString()
+    {
+        return ToTable();
     }
 }

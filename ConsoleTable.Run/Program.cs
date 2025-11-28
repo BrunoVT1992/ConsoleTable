@@ -4,11 +4,19 @@ class Program
 {
     static void Main(string[] args)
     {
-        WriteNormalTable();
+        WriteTableWithTextAllignment(true, true, 10, false);
 
         Console.WriteLine();
 
-        WriteNormalTableDifferentStyle();
+        WriteTableWithTextAllignment(false, true, 10, false);
+
+        Console.WriteLine();
+
+        WriteTableWithTextAllignment(true, false, 10, false);
+
+        Console.WriteLine();
+
+        WriteTableWithTextAllignment(false, false, 2, true);
 
         Console.WriteLine();
 
@@ -27,25 +35,6 @@ class Program
         WriteTableEachRowRandom();
 
         Console.Read();
-    }
-
-    private static void WriteNormalTable()
-    {
-        Console.WriteLine("Normal table:");
-
-        var table = new Table();
-
-        table.SetHeaders("Name", "Date", "Number");
-
-        for (int i = 0; i <= 10; i++)
-        {
-            if (i % 2 == 0)
-                table.AddRow($"name {i}", DateTime.Now.AddDays(-i).ToLongDateString(), i.ToString());
-            else
-                table.AddRow($"long name {i}", DateTime.Now.AddDays(-i).ToLongDateString(), (i * 5000).ToString());
-        }
-
-        Console.WriteLine(table.ToString());
     }
 
     private static void WriteTableWithoutHeaders()
@@ -102,7 +91,9 @@ class Program
         table.AddRow("name 3", DateTime.Now.AddDays(-2).ToLongDateString(), "1", "2", "3");
         table.AddRow("name 4", DateTime.Now.AddDays(-2).ToLongDateString());
         table.AddRow("name 5");
+        table.AddRow("name 55");
         table.AddRow();
+        table.AddRow(null!);
         table.AddRow("name 7", DateTime.Now.AddDays(-2).ToLongDateString(), "1", "2", "3", "4", "5");
         table.AddRow("name 8", DateTime.Now.AddDays(-2).ToLongDateString(), "1", "2", "3", "4", "5");
         table.AddRow("name 9", DateTime.Now.AddDays(-2).ToLongDateString(), "1", "2", "3");
@@ -111,15 +102,20 @@ class Program
         Console.WriteLine(table.ToString());
     }
 
-    private static void WriteNormalTableDifferentStyle()
+    private static void WriteTableWithTextAllignment(bool headerTextAlignRight, bool rowTextAlignRight, int padding, bool headerTextToUpperCase)
     {
-        Console.WriteLine("Normal table with different style:");
+        Console.WriteLine($"Table with folowing styling:");
+        Console.WriteLine($"Header text alignment: {(headerTextAlignRight ? "right" : "left")}");
+        Console.WriteLine($"Row text alignment: {(rowTextAlignRight ? "right" : "left")}");
+        Console.WriteLine($"Padding: {padding}");
+        Console.WriteLine($"Header text to upper case: {headerTextToUpperCase}");
 
         var table = new Table
         {
-            Padding = 5,
-            HeaderTextAlignRight = true,
-            RowTextAlignRight = true
+            Padding = padding,
+            HeaderTextAlignRight = headerTextAlignRight,
+            RowTextAlignRight = rowTextAlignRight,
+            HeaderTextToUpperCase = headerTextToUpperCase
         };
 
         table.SetHeaders("Name", "Date", "Number");
@@ -129,7 +125,7 @@ class Program
             if (i % 2 == 0)
                 table.AddRow($"name {i}", DateTime.Now.AddDays(-i).ToLongDateString(), i.ToString());
             else
-                table.AddRow($"long name {i}", DateTime.Now.AddDays(-i).ToLongDateString(), (i * 5000).ToString());
+                table.AddRow($"very long name {i}", DateTime.Now.AddDays(-i).ToLongDateString(), (i * 5000).ToString());
         }
 
         Console.WriteLine(table.ToString());
