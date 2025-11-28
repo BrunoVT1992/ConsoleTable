@@ -1,44 +1,33 @@
-﻿namespace ConsoleTable.Run;
+﻿namespace ConsoleTable.Examples;
 
 class Program
 {
     static void Main(string[] args)
     {
-        WriteTableWithTextAllignment(true, true, 10, false);
+        WriteTableWithStyling(true, true, 10, false);
 
-        Console.WriteLine();
+        WriteTableWithStyling(false, true, 10, false);
 
-        WriteTableWithTextAllignment(false, true, 10, false);
+        WriteTableWithStyling(true, false, 10, false);
 
-        Console.WriteLine();
-
-        WriteTableWithTextAllignment(true, false, 10, false);
-
-        Console.WriteLine();
-
-        WriteTableWithTextAllignment(false, false, 2, true);
-
-        Console.WriteLine();
+        WriteTableWithStyling(false, false, 2, true);
 
         WriteTableWithoutHeaders();
 
-        Console.WriteLine();
-
         WriteTableMoreHeaders();
-
-        Console.WriteLine();
 
         WriteTableLessHeaders();
 
-        Console.WriteLine();
-
         WriteTableEachRowRandom();
+
+        WriteTableFluent();
 
         Console.Read();
     }
 
     private static void WriteTableWithoutHeaders()
     {
+        Console.WriteLine();
         Console.WriteLine("Table without headers:");
 
         var table = new Table();
@@ -47,10 +36,12 @@ class Program
             table.AddRow($"name {i}", DateTime.Now.AddDays(-i).ToLongDateString(), i.ToString());
 
         Console.WriteLine(table.ToString());
+        Console.WriteLine();
     }
 
     private static void WriteTableMoreHeaders()
     {
+        Console.WriteLine();
         Console.WriteLine("Table with more headers:");
 
         var table = new Table();
@@ -62,10 +53,12 @@ class Program
         table.AddRow("name 3");
 
         Console.WriteLine(table.ToString());
+        Console.WriteLine();
     }
 
     private static void WriteTableLessHeaders()
     {
+        Console.WriteLine();
         Console.WriteLine("Table with less headers:");
 
         var table = new Table();
@@ -76,10 +69,12 @@ class Program
         table.AddRow("name 2", DateTime.Now.AddDays(-2).ToLongDateString(), "1");
 
         Console.WriteLine(table.ToString());
+        Console.WriteLine();
     }
 
     private static void WriteTableEachRowRandom()
     {
+        Console.WriteLine();
         Console.WriteLine("Table with random row column count:");
 
         var table = new Table();
@@ -88,22 +83,24 @@ class Program
 
         table.AddRow("name 1", DateTime.Now.AddDays(-1).ToLongDateString());
         table.AddRow("name 2", DateTime.Now.AddDays(-2).ToLongDateString(), "1");
-        table.AddRow("name 3", DateTime.Now.AddDays(-2).ToLongDateString(), "1", "2", "3");
-        table.AddRow("name 4", DateTime.Now.AddDays(-2).ToLongDateString());
+        table.AddRow("name 3", DateTime.Now.AddDays(-3).ToLongDateString(), "1", "2", "3");
+        table.AddRow("name 4", DateTime.Now.AddDays(-4).ToLongDateString());
         table.AddRow("name 5");
         table.AddRow("name 55");
         table.AddRow();
         table.AddRow(null!);
-        table.AddRow("name 7", DateTime.Now.AddDays(-2).ToLongDateString(), "1", "2", "3", "4", "5");
-        table.AddRow("name 8", DateTime.Now.AddDays(-2).ToLongDateString(), "1", "2", "3", "4", "5");
-        table.AddRow("name 9", DateTime.Now.AddDays(-2).ToLongDateString(), "1", "2", "3");
-        table.AddRow("name 10", DateTime.Now.AddDays(-2).ToLongDateString());
+        table.AddRow("name 7", DateTime.Now.AddDays(-9).ToLongDateString(), "1", "2", "3", "4", "5");
+        table.AddRow("name 8", DateTime.Now.AddDays(-10).ToLongDateString(), "1", "2", "3", "4", "5");
+        table.AddRow("name 9", DateTime.Now.AddDays(-11).ToLongDateString(), "1", "2", "3");
+        table.AddRow("name 10", DateTime.Now.AddDays(-12).ToLongDateString());
 
         Console.WriteLine(table.ToString());
+        Console.WriteLine();
     }
 
-    private static void WriteTableWithTextAllignment(bool headerTextAlignRight, bool rowTextAlignRight, int padding, bool headerTextToUpperCase)
+    private static void WriteTableWithStyling(bool headerTextAlignRight, bool rowTextAlignRight, int padding, bool headerTextToUpperCase)
     {
+        Console.WriteLine();
         Console.WriteLine($"Table with folowing styling:");
         Console.WriteLine($"Header text alignment: {(headerTextAlignRight ? "right" : "left")}");
         Console.WriteLine($"Row text alignment: {(rowTextAlignRight ? "right" : "left")}");
@@ -129,5 +126,24 @@ class Program
         }
 
         Console.WriteLine(table.ToString());
+        Console.WriteLine();
+    }
+
+    private static void WriteTableFluent()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Table fluent:");
+
+        var tableString = new Table()
+            .SetHeaders("Name", "Date")
+             .AddRow("name 1", DateTime.Now.ToLongDateString())
+             .AddRow("name 2", DateTime.Now.AddDays(-1).ToLongDateString())
+             .AddRow("name 3", DateTime.Now.AddDays(-2).ToLongDateString())
+             .AddRow("name 4", DateTime.Now.AddDays(-3).ToLongDateString())
+             .AddRow("name 5", DateTime.Now.AddDays(-4).ToLongDateString())
+             .ToTable();
+
+        Console.WriteLine(tableString);
+        Console.WriteLine();
     }
 }

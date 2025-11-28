@@ -4,18 +4,6 @@ namespace ConsoleTable;
 
 public class Table
 {
-    private const string TopLeftJoint = "┌";
-    private const string TopRightJoint = "┐";
-    private const string BottomLeftJoint = "└";
-    private const string BottomRightJoint = "┘";
-    private const string TopJoint = "┬";
-    private const string BottomJoint = "┴";
-    private const string LeftJoint = "├";
-    private const string MiddleJoint = "┼";
-    private const string RightJoint = "┤";
-    private const char HorizontalLine = '─';
-    private const string VerticalLine = "│";
-
     private string[]? _headers;
     private List<string[]> _rows = [];
     private string? _tableCache;
@@ -85,13 +73,13 @@ public class Table
         for (int i = 0; i < rowColumnCount; i++)
         {
             if (i == 0 && i == rowColumnCount - 1)
-                formattedTable.AppendLine(string.Format("{0}{1}{2}", TopLeftJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine), TopRightJoint));
+                formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.TopLeftJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.TopRightJoint));
             else if (i == 0)
-                formattedTable.Append(string.Format("{0}{1}", TopLeftJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine)));
+                formattedTable.Append(string.Format("{0}{1}", TableDrawing.TopLeftJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
             else if (i == rowColumnCount - 1)
-                formattedTable.AppendLine(string.Format("{0}{1}{2}", TopJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine), TopRightJoint));
+                formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.TopJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.TopRightJoint));
             else
-                formattedTable.Append(string.Format("{0}{1}", TopJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine)));
+                formattedTable.Append(string.Format("{0}{1}", TableDrawing.TopJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
         }
 
         return formattedTable;
@@ -102,13 +90,13 @@ public class Table
         for (int i = 0; i < rowColumnCount; i++)
         {
             if (i == 0 && i == rowColumnCount - 1)
-                formattedTable.AppendLine(string.Format("{0}{1}{2}", BottomLeftJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine), BottomRightJoint));
+                formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.BottomLeftJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.BottomRightJoint));
             else if (i == 0)
-                formattedTable.Append(string.Format("{0}{1}", BottomLeftJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine)));
+                formattedTable.Append(string.Format("{0}{1}", TableDrawing.BottomLeftJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
             else if (i == rowColumnCount - 1)
-                formattedTable.AppendLine(string.Format("{0}{1}{2}", BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine), BottomRightJoint));
+                formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.BottomRightJoint));
             else
-                formattedTable.Append(string.Format("{0}{1}", BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine)));
+                formattedTable.Append(string.Format("{0}{1}", TableDrawing.BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
         }
 
         return formattedTable;
@@ -132,13 +120,13 @@ public class Table
             var cellValue = alignRight ? column.PadLeft(restWidth, ' ') : column.PadRight(restWidth, ' ');
 
             if (cellIndex == 0 && cellIndex == lastCellIndex)
-                formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", VerticalLine, paddingString, cellValue, paddingString, VerticalLine));
+                formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", TableDrawing.VerticalLine, paddingString, cellValue, paddingString, TableDrawing.VerticalLine));
             else if (cellIndex == 0)
-                formattedTable.Append(string.Format("{0}{1}{2}{3}", VerticalLine, paddingString, cellValue, paddingString));
+                formattedTable.Append(string.Format("{0}{1}{2}{3}", TableDrawing.VerticalLine, paddingString, cellValue, paddingString));
             else if (cellIndex == lastCellIndex)
-                formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", VerticalLine, paddingString, cellValue, paddingString, VerticalLine));
+                formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", TableDrawing.VerticalLine, paddingString, cellValue, paddingString, TableDrawing.VerticalLine));
             else
-                formattedTable.Append(string.Format("{0}{1}{2}{3}", VerticalLine, paddingString, cellValue, paddingString));
+                formattedTable.Append(string.Format("{0}{1}{2}{3}", TableDrawing.VerticalLine, paddingString, cellValue, paddingString));
 
             cellIndex++;
         }
@@ -154,33 +142,33 @@ public class Table
         {
             if (i == 0 && i == maximumCells - 1)
             {
-                formattedTable.AppendLine(string.Format("{0}{1}{2}", LeftJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine), RightJoint));
+                formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.LeftJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.RightJoint));
             }
             else if (i == 0)
             {
-                formattedTable.Append(string.Format("{0}{1}", LeftJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine)));
+                formattedTable.Append(string.Format("{0}{1}", TableDrawing.LeftJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
             }
             else if (i == maximumCells - 1)
             {
                 if (i > previousRowColumnCount)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}", TopJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine), TopRightJoint));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.TopJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.TopRightJoint));
                 else if (i > rowColumnCount)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}", BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine), BottomRightJoint));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.BottomRightJoint));
                 else if (i > previousRowColumnCount - 1)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}", MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine), TopRightJoint));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.TopRightJoint));
                 else if (i > rowColumnCount - 1)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}", MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine), BottomRightJoint));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.BottomRightJoint));
                 else
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}", MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine), RightJoint));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.RightJoint));
             }
             else
             {
                 if (i > previousRowColumnCount)
-                    formattedTable.Append(string.Format("{0}{1}", TopJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine)));
+                    formattedTable.Append(string.Format("{0}{1}", TableDrawing.TopJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
                 else if (i > rowColumnCount)
-                    formattedTable.Append(string.Format("{0}{1}", BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine)));
+                    formattedTable.Append(string.Format("{0}{1}", TableDrawing.BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
                 else
-                    formattedTable.Append(string.Format("{0}{1}", MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], HorizontalLine)));
+                    formattedTable.Append(string.Format("{0}{1}", TableDrawing.MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
             }
         }
 

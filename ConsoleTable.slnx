@@ -2,6 +2,6 @@
   <Folder Name="/Tests/">
     <Project Path="Tests/ConsoleTable.Tests/ConsoleTable.Tests.csproj" />
   </Folder>
-  <Project Path="ConsoleTable.Run/ConsoleTable.Run.csproj" />
+  <Project Path="ConsoleTable.Examples/ConsoleTable.Examples.csproj" />
   <Project Path="ConsoleTable/ConsoleTable.csproj" />
 </Solution>
