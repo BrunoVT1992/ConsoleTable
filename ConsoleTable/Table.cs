@@ -8,29 +8,86 @@ public class Table
     private List<string[]> _rows = [];
     private string? _tableCache;
 
-    public int Padding { get; set; } = 1;
-    public bool HeaderTextAlignRight { get; set; }
-    public bool HeaderTextToUpperCase { get; set; } = false;
-    public bool RowTextAlignRight { get; set; }
+    private int _padding = 1;
+    /// <summary>
+    /// Gets or sets the amount of padding in spaces left and right of the rows cell content. Default is 1
+    /// </summary>
+    public int Padding
+    {
+        get => _padding;
+        set
+        {
+            if (value < 0)
+                throw new ArgumentOutOfRangeException(nameof(Padding), "Padding must be greater than or equal to 0.");
+
+            _padding = value;
+            ClearCache();
+        }
+    }
+
+    private bool headerTextAlignmentRight;
+    /// <summary>
+    /// Gets or sets a value indicating whether the header text is aligned to the right or left
+    /// </summary>
+    public bool HeaderTextAlignmentRight
+    {
+        get =>
+            headerTextAlignmentRight;
+        set
+        {
+            headerTextAlignmentRight = value;
+            ClearCache();
+        }
+    }
+
+    private bool headerTextToUpperCase;
+    /// <summary>
+    /// Gets or sets a value indicating whether headers are automatically converted to uppercase
+    /// </summary>
+    public bool HeaderTextToUpperCase
+    {
+        get =>
+            headerTextToUpperCase;
+        set
+        {
+            headerTextToUpperCase = value;
+            ClearCache();
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the row text is aligned to the right or left
+    /// </summary>
+    private bool rowTextAlignmentRight;
+    public bool RowTextAlignmentRight
+    {
+        get =>
+            rowTextAlignmentRight;
+        set
+        {
+            rowTextAlignmentRight = value;
+            ClearCache();
+        }
+    }
 
     public Table SetHeaders(params string[]? headers)
     {
-        _headers = headers?.Select(x => HeaderTextToUpperCase ? x.ToUpper() : x)?.ToArray();
-        _tableCache = null;
+        _headers = headers;
+        ClearCache();
         return this;
     }
 
     public Table AddRow(params string[] row)
     {
         _rows.Add(row);
-        _tableCache = null;
+        ClearCache();
         return this;
     }
 
     public Table ClearRows()
     {
         _rows.Clear();
-        _tableCache = null;
+        ClearCache();
         return this;
     }
 
@@ -175,6 +232,11 @@ public class Table
         return formattedTable;
     }
 
+    private void ClearCache()
+    {
+        _tableCache = null;
+    }
+
     public string ToTable()
     {
         if (!string.IsNullOrEmpty(_tableCache))
@@ -185,7 +247,7 @@ public class Table
         var firstRowIsHeader = false;
         if (_headers?.Any() == true)
         {
-            table.Add(_headers);
+            table.Add(_headers.Select(x => HeaderTextToUpperCase ? x.ToUpper() : x).ToArray());
             firstRowIsHeader = true;
         }
 
@@ -218,9 +280,9 @@ public class Table
         {
             var row = table[i];
 
-            var align = RowTextAlignRight;
+            var align = RowTextAlignmentRight;
             if (i == 0 && firstRowIsHeader)
-                align = HeaderTextAlignRight;
+                align = HeaderTextAlignmentRight;
 
             formattedTable = CreateValueLine(maximumCellWidths, row, align, formattedTable);
 

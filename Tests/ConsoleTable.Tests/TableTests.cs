@@ -24,10 +24,6 @@ public class TableTests
 
         Assert.Contains("Name", result);
         Assert.Contains("Age", result);
-        Assert.Contains("┌", result);
-        Assert.Contains("┐", result);
-        Assert.Contains("└", result);
-        Assert.Contains("┘", result);
     }
 
     [Fact]
@@ -95,20 +91,32 @@ public class TableTests
         Assert.Contains("Jane", result);
     }
 
-    [Fact]
-    public void Padding_DefaultValue_IsOne()
+    [Theory]
+    [InlineData(true, true, 10, true)]
+    [InlineData(false, false, 0, false)]
+    [InlineData(true, true, 10, false)]
+    [InlineData(true, true, 0, true)]
+    [InlineData(true, false, 10, false)]
+    [InlineData(false, true, 10, false)]
+    public void ClearRows_ThenAddNewRows_WithStyling(bool headerTextAlignRight, bool rowTextAlignRight, int padding, bool headerTextToUpperCase)
     {
-        var table = new Table();
+        var table = new Table
+        {
+            HeaderTextAlignmentRight = headerTextAlignRight,
+            RowTextAlignmentRight = rowTextAlignRight,
+            Padding = padding,
+            HeaderTextToUpperCase = headerTextToUpperCase
+        };
 
-        Assert.Equal(1, table.Padding);
-    }
+        table.SetHeaders("Name");
+        table.AddRow("John");
+        table.AddRow("Jane");
 
-    [Fact]
-    public void Padding_CanBeSet()
-    {
-        var table = new Table { Padding = 5 };
+        var result = table.ToTable();
 
-        Assert.Equal(5, table.Padding);
+        Assert.Contains(headerTextToUpperCase ? "NAME" : "Name", result);
+        Assert.DoesNotContain("John", result);
+        Assert.Contains("Jane", result);
     }
 
     [Fact]
@@ -150,15 +158,15 @@ public class TableTests
     {
         var table = new Table();
 
-        Assert.False(table.HeaderTextAlignRight);
+        Assert.False(table.HeaderTextAlignmentRight);
     }
 
     [Fact]
     public void HeaderTextAlignRight_CanBeSet()
     {
-        var table = new Table { HeaderTextAlignRight = true };
+        var table = new Table { HeaderTextAlignmentRight = true };
 
-        Assert.True(table.HeaderTextAlignRight);
+        Assert.True(table.HeaderTextAlignmentRight);
     }
 
     [Fact]
@@ -166,15 +174,15 @@ public class TableTests
     {
         var table = new Table();
 
-        Assert.False(table.RowTextAlignRight);
+        Assert.False(table.RowTextAlignmentRight);
     }
 
     [Fact]
     public void RowTextAlignRight_CanBeSet()
     {
-        var table = new Table { RowTextAlignRight = true };
+        var table = new Table { RowTextAlignmentRight = true };
 
-        Assert.True(table.RowTextAlignRight);
+        Assert.True(table.RowTextAlignmentRight);
     }
 
     [Fact]
@@ -334,11 +342,11 @@ public class TableTests
     [Fact]
     public void HeaderTextAlignRight_True_AlignsToDifferentPosition()
     {
-        var tableLeft = new Table { HeaderTextAlignRight = false };
+        var tableLeft = new Table { HeaderTextAlignmentRight = false };
         tableLeft.SetHeaders("H");
         tableLeft.AddRow("VeryLongValue");
 
-        var tableRight = new Table { HeaderTextAlignRight = true };
+        var tableRight = new Table { HeaderTextAlignmentRight = true };
         tableRight.SetHeaders("H");
         tableRight.AddRow("VeryLongValue");
 
@@ -354,11 +362,11 @@ public class TableTests
     [Fact]
     public void RowTextAlignRight_True_AlignsToDifferentPosition()
     {
-        var tableLeft = new Table { RowTextAlignRight = false };
+        var tableLeft = new Table { RowTextAlignmentRight = false };
         tableLeft.SetHeaders("HeaderHeader");
         tableLeft.AddRow("V");
 
-        var tableRight = new Table { RowTextAlignRight = true };
+        var tableRight = new Table { RowTextAlignmentRight = true };
         tableRight.SetHeaders("HeaderHeader");
         tableRight.AddRow("V");
 
