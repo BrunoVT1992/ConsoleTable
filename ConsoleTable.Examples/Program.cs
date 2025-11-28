@@ -110,8 +110,8 @@ class Program
         var table = new Table
         {
             Padding = padding,
-            HeaderTextAlignRight = headerTextAlignRight,
-            RowTextAlignRight = rowTextAlignRight,
+            HeaderTextAlignmentRight = headerTextAlignRight,
+            RowTextAlignmentRight = rowTextAlignRight,
             HeaderTextToUpperCase = headerTextToUpperCase
         };
 
