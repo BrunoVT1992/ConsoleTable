@@ -1,3 +1,5 @@
+using Xunit;
+
 namespace ConsoleTable.Tests;
 
 public class TableTests
