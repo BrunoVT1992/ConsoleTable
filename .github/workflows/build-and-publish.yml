@@ -67,21 +67,11 @@ jobs:
           if (-not $version) { Write-Error "Version not found"; exit 1 }
           echo "version=$version" >> $env:GITHUB_OUTPUT
 
-      # - name: Get version from csproj
-      #   id: get_version_and_changelog
-      #   run: |
-      #     VERSION=$(sed -n 's/.*<Version>\(.*\)<\/Version>.*/\1/p' ConsoleTable.Text/ConsoleTable.Text.csproj)
-      #     if [ -z "$VERSION" ]; then
-      #       echo "Error: Could not extract version from ConsoleTable.csproj"
-      #       exit 1
-      #     fi
-      #     echo "version=$VERSION" >> $GITHUB_OUTPUT
-
       - name: Get release notes from ChangeLog folder with version
         id: get_releasenotes
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
-          CHANGELOG_FILE="ChangeLogs/${VERSION}-changelog.md"
+          CHANGELOG_FILE="ChangeLogs/${VERSION}-ChangeLog.md"
           if [ ! -f "$CHANGELOG_FILE" ]; then
             echo "Error: Changelog file $CHANGELOG_FILE not found"
             exit 1
