@@ -31,6 +31,9 @@ dotnet add package ConsoleTable.Text
 <PackageReference Include="ConsoleTable.Text" Version="1.0.0" />
 ```
 
+### nuget.org
+Download this nuget package from [https://www.nuget.org/packages/ConsoleTable.Text](https://www.nuget.org/packages/ConsoleTable.Text)
+
 ## Quick Start
 
 ```csharp
