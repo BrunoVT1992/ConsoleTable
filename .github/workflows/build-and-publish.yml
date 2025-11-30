@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
 
     steps:
       - name: Checkout repository
@@ -53,27 +53,42 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Pack NuGet package
-        run: dotnet pack ConsoleTable/ConsoleTable.csproj --configuration Release --no-build --output ./nupkg
+        run: dotnet pack ConsoleTable.Text/ConsoleTable.Text.csproj --configuration Release --no-build --output ./nupkg
 
       - name: Publish to NuGet
         run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Get version from csproj
-        id: get_version
+        id: get_version_and_changelog
         run: |
-          VERSION=$(sed -n 's/.*<Version>\(.*\)<\/Version>.*/\1/p' ConsoleTable/ConsoleTable.csproj)
+          VERSION=$(sed -n 's/.*<Version>\(.*\)<\/Version>.*/\1/p' ConsoleTable.Text/ConsoleTable.Text.csproj)
           if [ -z "$VERSION" ]; then
             echo "Error: Could not extract version from ConsoleTable.csproj"
             exit 1
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Get release notes from ChangeLog folder with version
+        id: get_releasenotes
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          CHANGELOG_FILE="ChangeLogs/${VERSION}-changelog.md"
+          if [ ! -f "$CHANGELOG_FILE" ]; then
+            echo "Error: Changelog file $CHANGELOG_FILE not found"
+            exit 1
+          fi
+          RELEASE_NOTES=$(cat "$CHANGELOG_FILE")
+          # Escape % for GitHub Actions output
+          RELEASE_NOTES="${RELEASE_NOTES//'%'/'%25'}"
+          RELEASE_NOTES="${RELEASE_NOTES//$'\n'/'%0A'}"
+          RELEASE_NOTES="${RELEASE_NOTES//$'\r'/'%0D'}"
+          echo "releasenotes=$RELEASE_NOTES" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.get_version.outputs.version }}
           name: Release v${{ steps.get_version.outputs.version }}
-          generate_release_notes: true
-          files: ./nupkg/*.nupkg
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          body: v${{ steps.get_releasenotes.outputs.releasenotes }}
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
