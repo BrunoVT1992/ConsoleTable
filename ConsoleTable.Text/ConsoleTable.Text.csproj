@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
+
+		<!-- NuGet Package Metadata -->
+		<PackageId>ConsoleTable.Text</PackageId>
+		<Version>1.0.1</Version>
+		<Authors>Bruno Van Thournout</Authors>
+		<Description>A library for creating a formatted string tables with customizable headers, rows, and alignment options.</Description>
+		<PackageProjectUrl>https://github.com/BrunoVT1992/ConsoleTable</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/BrunoVT1992/ConsoleTable</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>console;table;formatting;cli</PackageTags>
+		<PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\"/>
+		<None Include="..\LICENSE" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+
+</Project>

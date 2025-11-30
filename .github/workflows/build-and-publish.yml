@@ -1,0 +1,89 @@
+name: Build, Test and Publish NuGet
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run unit tests
+        run: dotnet test --configuration Release --no-build --verbosity normal
+
+  publish:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack NuGet package
+        run: dotnet pack ConsoleTable.Text/ConsoleTable.Text.csproj --configuration Release --no-build --output ./nupkg
+
+      - name: Publish to NuGet
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Get version from csproj using PowerShell
+        id: get_version
+        shell: pwsh
+        run: |
+          [xml]$csproj = Get-Content 'ConsoleTable.Text/ConsoleTable.Text.csproj'
+          $version = $csproj.Project.PropertyGroup.Version
+          if (-not $version) { Write-Error "Version not found"; exit 1 }
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Get release notes from ChangeLog folder with version
+        id: get_releasenotes
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          CHANGELOG_FILE="ChangeLogs/${VERSION}-ChangeLog.md"
+          if [ ! -f "$CHANGELOG_FILE" ]; then
+            echo "Error: Changelog file $CHANGELOG_FILE not found"
+            exit 1
+          fi
+          RELEASE_NOTES=$(cat "$CHANGELOG_FILE")
+          echo "releasenotes<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: Release v${{ steps.get_version.outputs.version }}
+          body: ${{ steps.get_releasenotes.outputs.releasenotes }}
