@@ -67,6 +67,22 @@ jobs:
           if (-not $version) { Write-Error "Version not found"; exit 1 }
           echo "version=$version" >> $env:GITHUB_OUTPUT
 
+      # - name: Get release notes from ChangeLog folder with version
+      #   id: get_releasenotes
+      #   run: |
+      #     VERSION="${{ steps.get_version.outputs.version }}"
+      #     CHANGELOG_FILE="ChangeLogs/${VERSION}-ChangeLog.txt"
+      #     if [ ! -f "$CHANGELOG_FILE" ]; then
+      #       echo "Error: Changelog file $CHANGELOG_FILE not found"
+      #       exit 1
+      #     fi
+      #     RELEASE_NOTES=$(cat "$CHANGELOG_FILE")
+      #     # Escape % for GitHub Actions output
+      #     RELEASE_NOTES="${RELEASE_NOTES//'%'/'%25'}"
+      #     RELEASE_NOTES="${RELEASE_NOTES//$'\n'/'%0A'}"
+      #     RELEASE_NOTES="${RELEASE_NOTES//$'\r'/'%0D'}"
+      #     echo "releasenotes=$RELEASE_NOTES" >> $GITHUB_OUTPUT
+
       - name: Get release notes from ChangeLog folder with version
         id: get_releasenotes
         run: |
@@ -77,11 +93,9 @@ jobs:
             exit 1
           fi
           RELEASE_NOTES=$(cat "$CHANGELOG_FILE")
-          # Escape % for GitHub Actions output
-          # RELEASE_NOTES="${RELEASE_NOTES//'%'/'%25'}"
-          # RELEASE_NOTES="${RELEASE_NOTES//$'\n'/'%0A'}"
-          # RELEASE_NOTES="${RELEASE_NOTES//$'\r'/'%0D'}"
-          echo "releasenotes=$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "releasenotes<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -90,5 +104,3 @@ jobs:
           name: Release v${{ steps.get_version.outputs.version }}
           body: v${{ steps.get_releasenotes.outputs.releasenotes }}
           files: ""
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
