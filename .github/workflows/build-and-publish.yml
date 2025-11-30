@@ -71,7 +71,7 @@ jobs:
         id: get_releasenotes
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
-          CHANGELOG_FILE="ChangeLogs/${VERSION}-ChangeLog.md"
+          CHANGELOG_FILE="ChangeLogs/${VERSION}-ChangeLog.txt"
           if [ ! -f "$CHANGELOG_FILE" ]; then
             echo "Error: Changelog file $CHANGELOG_FILE not found"
             exit 1
