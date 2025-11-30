@@ -67,27 +67,11 @@ jobs:
           if (-not $version) { Write-Error "Version not found"; exit 1 }
           echo "version=$version" >> $env:GITHUB_OUTPUT
 
-      # - name: Get release notes from ChangeLog folder with version
-      #   id: get_releasenotes
-      #   run: |
-      #     VERSION="${{ steps.get_version.outputs.version }}"
-      #     CHANGELOG_FILE="ChangeLogs/${VERSION}-ChangeLog.txt"
-      #     if [ ! -f "$CHANGELOG_FILE" ]; then
-      #       echo "Error: Changelog file $CHANGELOG_FILE not found"
-      #       exit 1
-      #     fi
-      #     RELEASE_NOTES=$(cat "$CHANGELOG_FILE")
-      #     # Escape % for GitHub Actions output
-      #     RELEASE_NOTES="${RELEASE_NOTES//'%'/'%25'}"
-      #     RELEASE_NOTES="${RELEASE_NOTES//$'\n'/'%0A'}"
-      #     RELEASE_NOTES="${RELEASE_NOTES//$'\r'/'%0D'}"
-      #     echo "releasenotes=$RELEASE_NOTES" >> $GITHUB_OUTPUT
-
       - name: Get release notes from ChangeLog folder with version
         id: get_releasenotes
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
-          CHANGELOG_FILE="ChangeLogs/${VERSION}-ChangeLog.txt"
+          CHANGELOG_FILE="ChangeLogs/${VERSION}-ChangeLog.md"
           if [ ! -f "$CHANGELOG_FILE" ]; then
             echo "Error: Changelog file $CHANGELOG_FILE not found"
             exit 1
@@ -102,5 +86,4 @@ jobs:
         with:
           tag_name: v${{ steps.get_version.outputs.version }}
           name: Release v${{ steps.get_version.outputs.version }}
-          body: v${{ steps.get_releasenotes.outputs.releasenotes }}
-          files: ""
+          body: ${{ steps.get_releasenotes.outputs.releasenotes }}

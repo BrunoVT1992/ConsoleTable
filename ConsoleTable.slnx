@@ -4,7 +4,7 @@
     <File Path=".github/workflows/build-and-publish.yml" />
   </Folder>
   <Folder Name="/ChangeLogs/">
-    <File Path="ChangeLogs/1.0.0-ChangeLog.txt" />
+    <File Path="ChangeLogs/1.0.0-ChangeLog.md" />
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="Tests/ConsoleTable.Text.Tests/ConsoleTable.Text.Tests.csproj" />
