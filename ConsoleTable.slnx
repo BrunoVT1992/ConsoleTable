@@ -5,6 +5,7 @@
   </Folder>
   <Folder Name="/ChangeLogs/">
     <File Path="ChangeLogs/1.0.0-ChangeLog.md" />
+	<File Path="ChangeLogs/1.0.1-ChangeLog.md" />
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="Tests/ConsoleTable.Text.Tests/ConsoleTable.Text.Tests.csproj" />
