@@ -267,7 +267,7 @@ namespace ConsoleTable.Text
                 foreach (var row in _rows)
                 {
                     //Weird behaviour with empty rows
-                    if ((row == null || row.Count() <= 0) && _headers?.Count() > 0)
+                    if ((row == null || row.Length <= 0) && _headers?.Length > 0)
                         table.AddRange(new string[][] { new string[] { " " } });
                     else
                         table.Add(row);

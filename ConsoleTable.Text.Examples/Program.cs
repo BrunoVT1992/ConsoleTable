@@ -120,7 +120,7 @@ class Program
     private static void WriteTableWithStyling(bool headerTextAlignRight, bool rowTextAlignRight, int padding)
     {
         Console.WriteLine();
-        Console.WriteLine($"Table with folowing styling:");
+        Console.WriteLine($"Table with following styling:");
         Console.WriteLine($"Header text alignment: {(headerTextAlignRight ? "right" : "left")}");
         Console.WriteLine($"Row text alignment: {(rowTextAlignRight ? "right" : "left")}");
         Console.WriteLine($"Padding: {padding}");
