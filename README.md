@@ -10,6 +10,10 @@ A lightweight .NET library for creating beautifully formatted console tables wit
 - 📏 Configurable cell padding
 - ↔️ Text alignment options (left/right) for headers and rows
 - 📐 Support for varying column counts across rows
+- 🧹 Easy clearing and reusing of tables
+- ⚙️ Simple and intuitive API
+- Optimzed for performance
+- Support for incosistent column count across rows (each row can have its own number of cells).
 
 ## Installation
 
@@ -56,7 +60,7 @@ Output:
 ├─────────┼─────┼─────────────┤
 │ Bob     │ 25  │ Los Angeles │
 ├─────────┼─────┼─────────────┤
-│ Charlie │ 35  │ Chicago     │
+│ Charlie │ 47  │ Chicago     │
 └─────────┴─────┴─────────────┘
 ```
 
@@ -67,216 +71,166 @@ Output:
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `Padding` | `int` | `1` | The number of spaces on each side of cell content |
-| `HeaderTextAlignRight` | `bool` | `false` | When `true`, header text is right-aligned |
-| `RowTextAlignRight` | `bool` | `false` | When `true`, row text is right-aligned |
+| `HeaderTextAlignmentRight` | `bool` | `false` | When `true`, header text is right-aligned otherwise left aligned |
+| `RowTextAlignmentRight` | `bool` | `false` | When `true`, row text is right-aligned otherwise left aligned |
 
 ### Methods
 
 | Method | Description |
 |--------|-------------|
-| `SetHeaders(params string[] headers)` | Sets the table headers. Calling this again will overwrite previous headers. |
-| `AddRow(params string[] row)` | Adds a data row to the table. |
+| `SetHeaders(params string[] headers)` | Sets the table headers. Calling this again will overwrite previous headers. Headers are not required. |
+| `AddRow(params string[] row)` | Adds a data row to the table. Rows are not required. |
 | `ClearRows()` | Removes all data rows from the table (headers are preserved). |
-| `ToString()` | Returns the formatted table as a string. |
+| `Clear()` | Clear all the headers and rows from the table. |
+| `ToTable() / ToString()` | Returns the formatted table as a string. |
 
 ## Examples
-
-### Basic Table with Headers
-
-```csharp
-var table = new Table();
-table.SetHeaders("Product", "Price", "Quantity");
-table.AddRow("Apple", "$1.50", "100");
-table.AddRow("Banana", "$0.75", "150");
-table.AddRow("Orange", "$2.00", "80");
-
-Console.WriteLine(table.ToString());
-```
-
-Output:
-```
-┌─────────┬───────┬──────────┐
-│ Product │ Price │ Quantity │
-├─────────┼───────┼──────────┤
-│ Apple   │ $1.50 │ 100      │
-├─────────┼───────┼──────────┤
-│ Banana  │ $0.75 │ 150      │
-├─────────┼───────┼──────────┤
-│ Orange  │ $2.00 │ 80       │
-└─────────┴───────┴──────────┘
-```
-
-### Table Without Headers
-
-```csharp
-var table = new Table();
-table.AddRow("Row 1, Col 1", "Row 1, Col 2");
-table.AddRow("Row 2, Col 1", "Row 2, Col 2");
-
-Console.WriteLine(table.ToString());
-```
-
-Output:
-```
-┌──────────────┬──────────────┐
-│ Row 1, Col 1 │ Row 1, Col 2 │
-├──────────────┼──────────────┤
-│ Row 2, Col 1 │ Row 2, Col 2 │
-└──────────────┴──────────────┘
-```
 
 ### Custom Padding
 
 ```csharp
-var table = new Table { Padding = 3 };
-table.SetHeaders("Name", "Value");
-table.AddRow("Item", "100");
+using ConsoleTable;
 
-Console.WriteLine(table.ToString());
+var table = new Table { Padding = 10 };
+
+table.SetHeaders("Name", "Age", "City");
+
+table.AddRow("Alice", "30", "New York");
+table.AddRow("Bob", "25", "Los Angeles");
+table.AddRow("Charlie", "47", "Chicago");
+
+Console.WriteLine(table.ToTable());
 ```
 
 Output:
 ```
-┌──────────┬───────────┐
-│   Name   │   Value   │
-├──────────┼───────────┤
-│   Item   │   100     │
-└──────────┴───────────┘
+┌───────────────────────────┬───────────────────────┬───────────────────────────────┐
+│          Name             │          Age          │          City                 │
+├───────────────────────────┼───────────────────────┼───────────────────────────────┤
+│          Alice            │          30           │          New York             │
+├───────────────────────────┼───────────────────────┼───────────────────────────────┤
+│          Bob              │          25           │          Los Angeles          │
+├───────────────────────────┼───────────────────────┼───────────────────────────────┤
+│          Charlie          │          47           │          Chicago              │
+└───────────────────────────┴───────────────────────┴───────────────────────────────┘
 ```
 
-### Right-Aligned Text
+### Text Alignment Right
 
 ```csharp
-var table = new Table
-{
-    HeaderTextAlignRight = true,
-    RowTextAlignRight = true
-};
+using ConsoleTable;
 
-table.SetHeaders("Description", "Amount");
-table.AddRow("Total Sales", "1,234,567");
-table.AddRow("Expenses", "987,654");
-table.AddRow("Profit", "246,913");
+var table = new Table { HeaderTextAlignmentRight = true, RowTextAlignmentRight = true };
 
-Console.WriteLine(table.ToString());
+table.SetHeaders("Name", "Age", "City");
+
+table.AddRow("Alice Cooper", "30", "New York");
+table.AddRow("Bob", "25", "Los Angeles");
+table.AddRow("Charlie Brown", "47", "Chicago");
+
+Console.WriteLine(table.ToTable());
 ```
 
 Output:
 ```
-┌─────────────┬───────────┐
-│ Description │    Amount │
-├─────────────┼───────────┤
-│ Total Sales │ 1,234,567 │
-├─────────────┼───────────┤
-│    Expenses │   987,654 │
-├─────────────┼───────────┤
-│      Profit │   246,913 │
-└─────────────┴───────────┘
+┌───────────────┬─────┬─────────────┐
+│          Name │ Age │        City │
+├───────────────┼─────┼─────────────┤
+│  Alice Cooper │  30 │    New York │
+├───────────────┼─────┼─────────────┤
+│           Bob │  25 │ Los Angeles │
+├───────────────┼─────┼─────────────┤
+│ Charlie Brown │  47 │     Chicago │
+└───────────────┴─────┴─────────────┘
 ```
 
-### Clearing and Reusing a Table
+### Table with inconsistent columns across rows
 
 ```csharp
+using ConsoleTable;
+
 var table = new Table();
-table.SetHeaders("Status", "Count");
-table.AddRow("Active", "10");
-table.AddRow("Inactive", "5");
 
-Console.WriteLine("Before clearing:");
-Console.WriteLine(table.ToString());
+table.SetHeaders("Name", "Age", "City");
 
-table.ClearRows();
-table.AddRow("Active", "15");
-table.AddRow("Inactive", "3");
-
-Console.WriteLine("After clearing and adding new rows:");
-Console.WriteLine(table.ToString());
-```
-
-### Varying Column Counts
-
-The table handles rows with different numbers of columns gracefully:
-
-```csharp
-var table = new Table();
-table.SetHeaders("Name", "Date", "Number", "Id");
-table.AddRow("Item 1", "2025-01-01", "100");    // 3 columns
-table.AddRow("Item 2", "2025-01-02");            // 2 columns
-table.AddRow("Item 3");                          // 1 column
+table.AddRow("Alice");
+table.AddRow("Bob", "25", "Antwerp", "Belgium");
+table.AddRow("Charlie", "47", "Chicago");
+table.AddRow("Karina", "33", "Lima", "Peru", "South-America");
+table.AddRow("Jenny", "43");
+table.AddRow("John");
+table.AddRow("Johny");
+table.AddRow();
+table.AddRow(null!);
+table.AddRow("Thomas", "33", "Brussels", "Belgium", "Europe", "Earth", "Solar System");
+table.AddRow("Nathalie", "29", "Paris", "France", "Europe", "Earth", "Solar System");
+table.AddRow("Mathias", "37", "Oslo", "Norway", "Europe", "Earth", "Solar System");
+table.AddRow("Kenny", "55", "Tokyo");
 
 Console.WriteLine(table.ToString());
 ```
 
 Output:
 ```
-┌────────┬────────────┬────────┬────┐
-│ Name   │ Date       │ Number │ Id │
-├────────┼────────────┼────────┼────┘
-│ Item 1 │ 2025-01-01 │ 100    │
-├────────┼────────────┼────────┘
-│ Item 2 │ 2025-01-02 │
-├────────┼────────────┘
-│ Item 3 │
-└────────┘
+┌──────────┬─────┬──────────┐
+│ Name     │ Age │ City     │
+├──────────┼─────┴──────────┘
+│ Alice    │
+├──────────┼─────┬──────────┬─────────┐
+│ Bob      │ 25  │ Antwerp  │ Belgium │
+├──────────┼─────┼──────────┼─────────┘
+│ Charlie  │ 47  │ Chicago  │
+├──────────┼─────┼──────────┼─────────┬───────────────┐
+│ Karina   │ 33  │ Lima     │ Peru    │ South-America │
+├──────────┼─────┼──────────┴─────────┴───────────────┘
+│ Jenny    │ 43  │
+├──────────┼─────┘
+│ John     │
+├──────────┤
+│ Johny    │
+├──────────┤
+│          │
+├──────────┤
+│          │
+├──────────┼─────┬──────────┬─────────┬───────────────┬───────┬──────────────┐
+│ Thomas   │ 33  │ Brussels │ Belgium │ Europe        │ Earth │ Solar System │
+├──────────┼─────┼──────────┼─────────┼───────────────┼───────┼──────────────┤
+│ Nathalie │ 29  │ Paris    │ France  │ Europe        │ Earth │ Solar System │
+├──────────┼─────┼──────────┼─────────┼───────────────┼───────┼──────────────┤
+│ Mathias  │ 37  │ Oslo     │ Norway  │ Europe        │ Earth │ Solar System │
+├──────────┼─────┼──────────┼─────────┴───────────────┴───────┴──────────────┘
+│ Kenny    │ 55  │ Tokyo    │
+└──────────┴─────┴──────────┘
 ```
 
-### Rows with More Columns Than Headers
+### Write a Table Fluent
 
 ```csharp
-var table = new Table();
-table.SetHeaders("Name");
-table.AddRow("Item 1", "Extra 1");
-table.AddRow("Item 2", "Extra 2", "Extra 3");
+using ConsoleTable;
 
-Console.WriteLine(table.ToString());
+ var tableString = new Table()
+    .SetHeaders("Name", "Age", "City")
+    .AddRow("Alice Cooper", "30", "New York")
+    .AddRow("Bob", "25", "Los Angeles")
+    .AddRow("Charlie Brown", "47", "Chicago")
+    .ToTable();
+
+Console.WriteLine(tableString);
 ```
 
 Output:
 ```
-┌────────┐
-│ Name   │
-├────────┼─────────┐
-│ Item 1 │ Extra 1 │
-├────────┼─────────┼─────────┐
-│ Item 2 │ Extra 2 │ Extra 3 │
-└────────┴─────────┴─────────┘
-```
-
-### Combined Styling Options
-
-```csharp
-var table = new Table
-{
-    Padding = 2,
-    HeaderTextAlignRight = false,
-    RowTextAlignRight = true
-};
-
-table.SetHeaders("Item", "Quantity", "Price");
-table.AddRow("Widget A", "50", "$10.00");
-table.AddRow("Widget B", "1000", "$5.50");
-table.AddRow("Widget C", "5", "$100.00");
-
-Console.WriteLine(table.ToString());
-```
-
-Output:
-```
-┌────────────┬────────────┬───────────┐
-│  Item      │  Quantity  │  Price    │
-├────────────┼────────────┼───────────┤
-│  Widget A  │        50  │   $10.00  │
-├────────────┼────────────┼───────────┤
-│  Widget B  │      1000  │    $5.50  │
-├────────────┼────────────┼───────────┤
-│  Widget C  │         5  │  $100.00  │
-└────────────┴────────────┴───────────┘
+┌───────────────┬─────┬─────────────┐
+│ Name          │ Age │ City        │
+├───────────────┼─────┼─────────────┤
+│ Alice Cooper  │ 30  │ New York    │
+├───────────────┼─────┼─────────────┤
+│ Bob           │ 25  │ Los Angeles │
+├───────────────┼─────┼─────────────┤
+│ Charlie Brown │ 47  │ Chicago     │
+└───────────────┴─────┴─────────────┘
 ```
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.

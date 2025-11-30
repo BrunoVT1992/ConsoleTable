@@ -76,6 +76,21 @@ public class TableTests
     }
 
     [Fact]
+    public void Clear_IsEmpty()
+    {
+        var table = new Table();
+        table.SetHeaders("Name", "Age");
+        table.AddRow("John", "30");
+        table.AddRow("Jane", "25");
+
+        table.Clear();
+
+        var result = table.ToString();
+
+        Assert.Empty(result);
+    }
+
+    [Fact]
     public void ClearRows_ThenAddNewRows_Works()
     {
         var table = new Table();
@@ -92,20 +107,18 @@ public class TableTests
     }
 
     [Theory]
-    [InlineData(true, true, 10, true)]
-    [InlineData(false, false, 0, false)]
-    [InlineData(true, true, 10, false)]
-    [InlineData(true, true, 0, true)]
-    [InlineData(true, false, 10, false)]
-    [InlineData(false, true, 10, false)]
-    public void ToTable_WithStyling(bool headerTextAlignRight, bool rowTextAlignRight, int padding, bool headerTextToUpperCase)
+    [InlineData(true, true, 10)]
+    [InlineData(false, false, 0)]
+    [InlineData(true, true, 0)]
+    [InlineData(true, false, 10)]
+    [InlineData(false, true, 10)]
+    public void ToTable_WithStyling(bool headerTextAlignRight, bool rowTextAlignRight, int padding)
     {
         var table = new Table
         {
             HeaderTextAlignmentRight = headerTextAlignRight,
             RowTextAlignmentRight = rowTextAlignRight,
             Padding = padding,
-            HeaderTextToUpperCase = headerTextToUpperCase
         };
 
         table.SetHeaders("Name");
@@ -114,7 +127,7 @@ public class TableTests
 
         var result = table.ToTable();
 
-        Assert.Contains(headerTextToUpperCase ? "NAME" : "Name", result);
+        Assert.Contains("Name", result);
         Assert.Contains("John", result);
         Assert.Contains("Jane", result);
     }

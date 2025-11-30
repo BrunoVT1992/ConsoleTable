@@ -40,21 +40,6 @@ public class Table
         }
     }
 
-    private bool headerTextToUpperCase;
-    /// <summary>
-    /// Gets or sets a value indicating whether headers are automatically converted to uppercase
-    /// </summary>
-    public bool HeaderTextToUpperCase
-    {
-        get =>
-            headerTextToUpperCase;
-        set
-        {
-            headerTextToUpperCase = value;
-            ClearCache();
-        }
-    }
-
     /// <summary>
     /// Gets or sets a value indicating whether the row text is aligned to the right or left
     /// </summary>
@@ -247,6 +232,17 @@ public class Table
     }
 
     /// <summary>
+    /// Clear all the headers and rows from the table
+    /// </summary>
+    public Table Clear()
+    {
+        SetHeaders(null);
+        ClearRows();
+        ClearCache();
+        return this;
+    }
+
+    /// <summary>
     /// Generates the formatted table to a string
     /// </summary>
     public string ToTable()
@@ -259,7 +255,7 @@ public class Table
         var firstRowIsHeader = false;
         if (_headers?.Any() == true)
         {
-            table.Add(_headers.Select(x => HeaderTextToUpperCase ? x.ToUpper() : x).ToArray());
+            table.Add(_headers);
             firstRowIsHeader = true;
         }
 

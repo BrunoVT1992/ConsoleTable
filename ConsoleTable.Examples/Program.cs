@@ -4,13 +4,15 @@ class Program
 {
     static void Main(string[] args)
     {
-        WriteTableWithStyling(true, true, 10, false);
+        WriteDefaultTable();
 
-        WriteTableWithStyling(false, true, 10, false);
+        WriteTableWithStyling(true, true, 10);
 
-        WriteTableWithStyling(true, false, 10, false);
+        WriteTableWithStyling(false, true, 10);
 
-        WriteTableWithStyling(false, false, 2, true);
+        WriteTableWithStyling(true, false, 10);
+
+        WriteTableWithStyling(false, false, 10);
 
         WriteTableWithoutHeaders();
 
@@ -25,6 +27,21 @@ class Program
         Console.Read();
     }
 
+    private static void WriteDefaultTable()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Default table:");
+
+        var table = new Table();
+        table.SetHeaders("Name", "Age", "City");
+        table.AddRow("Alice Cooper", "30", "New York");
+        table.AddRow("Bob", "25", "Los Angeles");
+        table.AddRow("Charlie Brown", "47", "Chicago");
+
+        Console.WriteLine(table.ToTable());
+        Console.WriteLine();
+    }
+
     private static void WriteTableWithoutHeaders()
     {
         Console.WriteLine();
@@ -32,8 +49,8 @@ class Program
 
         var table = new Table();
 
-        for (int i = 0; i <= 5; i++)
-            table.AddRow($"name {i}", DateTime.Now.AddDays(-i).ToLongDateString(), i.ToString());
+        for (int i = 1; i <= 5; i++)
+            table.AddRow($"name {i}", (i * 15).ToString());
 
         Console.WriteLine(table.ToString());
         Console.WriteLine();
@@ -46,11 +63,11 @@ class Program
 
         var table = new Table();
 
-        table.SetHeaders("Name", "Date", "Number", "Id");
+        table.SetHeaders("Name", "Age", "City", "Country");
 
-        table.AddRow("name 1", DateTime.Now.AddDays(-1).ToLongDateString(), "1");
-        table.AddRow("name 2", DateTime.Now.AddDays(-2).ToLongDateString());
-        table.AddRow("name 3");
+        table.AddRow("Alice Cooper", "30");
+        table.AddRow("Bob", "25");
+        table.AddRow("Charlie Brown", "47");
 
         Console.WriteLine(table.ToString());
         Console.WriteLine();
@@ -65,8 +82,9 @@ class Program
 
         table.SetHeaders("Name");
 
-        table.AddRow("name 1", DateTime.Now.AddDays(-1).ToLongDateString());
-        table.AddRow("name 2", DateTime.Now.AddDays(-2).ToLongDateString(), "1");
+        table.AddRow("Alice Cooper", "30", "New York");
+        table.AddRow("Bob", "25", "Los Angeles");
+        table.AddRow("Charlie Brown", "47", "Chicago");
 
         Console.WriteLine(table.ToString());
         Console.WriteLine();
@@ -79,50 +97,49 @@ class Program
 
         var table = new Table();
 
-        table.SetHeaders("Name", "Date");
+        table.SetHeaders("Name", "Age", "City");
 
-        table.AddRow("name 1", DateTime.Now.AddDays(-1).ToLongDateString());
-        table.AddRow("name 2", DateTime.Now.AddDays(-2).ToLongDateString(), "1");
-        table.AddRow("name 3", DateTime.Now.AddDays(-3).ToLongDateString(), "1", "2", "3");
-        table.AddRow("name 4", DateTime.Now.AddDays(-4).ToLongDateString());
-        table.AddRow("name 5");
-        table.AddRow("name 55");
+        table.AddRow("Alice");
+        table.AddRow("Bob", "25", "Antwerp", "Belgium");
+        table.AddRow("Charlie", "47", "Chicago");
+        table.AddRow("Karina", "33", "Lima", "Peru", "South-America");
+        table.AddRow("Jenny", "43");
+        table.AddRow("John");
+        table.AddRow("Johny");
         table.AddRow();
         table.AddRow(null!);
-        table.AddRow("name 7", DateTime.Now.AddDays(-9).ToLongDateString(), "1", "2", "3", "4", "5");
-        table.AddRow("name 8", DateTime.Now.AddDays(-10).ToLongDateString(), "1", "2", "3", "4", "5");
-        table.AddRow("name 9", DateTime.Now.AddDays(-11).ToLongDateString(), "1", "2", "3");
-        table.AddRow("name 10", DateTime.Now.AddDays(-12).ToLongDateString());
+        table.AddRow("Thomas", "33", "Brussels", "Belgium", "Europe", "Earth", "Solar System");
+        table.AddRow("Nathalie", "29", "Paris", "France", "Europe", "Earth", "Solar System");
+        table.AddRow("Mathias", "37", "Oslo", "Norway", "Europe", "Earth", "Solar System");
+        table.AddRow("Kenny", "55", "Tokyo");
 
         Console.WriteLine(table.ToString());
         Console.WriteLine();
     }
 
-    private static void WriteTableWithStyling(bool headerTextAlignRight, bool rowTextAlignRight, int padding, bool headerTextToUpperCase)
+    private static void WriteTableWithStyling(bool headerTextAlignRight, bool rowTextAlignRight, int padding)
     {
         Console.WriteLine();
         Console.WriteLine($"Table with folowing styling:");
         Console.WriteLine($"Header text alignment: {(headerTextAlignRight ? "right" : "left")}");
         Console.WriteLine($"Row text alignment: {(rowTextAlignRight ? "right" : "left")}");
         Console.WriteLine($"Padding: {padding}");
-        Console.WriteLine($"Header text to upper case: {headerTextToUpperCase}");
 
         var table = new Table
         {
             Padding = padding,
             HeaderTextAlignmentRight = headerTextAlignRight,
-            RowTextAlignmentRight = rowTextAlignRight,
-            HeaderTextToUpperCase = headerTextToUpperCase
+            RowTextAlignmentRight = rowTextAlignRight
         };
 
-        table.SetHeaders("Name", "Date", "Number");
+        table.SetHeaders("Name", "Age", "City");
 
-        for (int i = 0; i <= 10; i++)
+        for (int i = 1; i <= 10; i++)
         {
             if (i % 2 == 0)
-                table.AddRow($"name {i}", DateTime.Now.AddDays(-i).ToLongDateString(), i.ToString());
+                table.AddRow($"Name {i}", (i * 8).ToString(), $"City {i}");
             else
-                table.AddRow($"very long name {i}", DateTime.Now.AddDays(-i).ToLongDateString(), (i * 5000).ToString());
+                table.AddRow($"Very Long Name {i}", (i * 8).ToString(), $"City {i}");
         }
 
         Console.WriteLine(table.ToString());
@@ -135,13 +152,11 @@ class Program
         Console.WriteLine("Table fluent:");
 
         var tableString = new Table()
-            .SetHeaders("Name", "Date")
-             .AddRow("name 1", DateTime.Now.ToLongDateString())
-             .AddRow("name 2", DateTime.Now.AddDays(-1).ToLongDateString())
-             .AddRow("name 3", DateTime.Now.AddDays(-2).ToLongDateString())
-             .AddRow("name 4", DateTime.Now.AddDays(-3).ToLongDateString())
-             .AddRow("name 5", DateTime.Now.AddDays(-4).ToLongDateString())
-             .ToTable();
+            .SetHeaders("Name", "Age", "City")
+            .AddRow("Alice Cooper", "30", "New York")
+            .AddRow("Bob", "25", "Los Angeles")
+            .AddRow("Charlie Brown", "47", "Chicago")
+            .ToTable();
 
         Console.WriteLine(tableString);
         Console.WriteLine();
