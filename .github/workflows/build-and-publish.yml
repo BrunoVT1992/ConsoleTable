@@ -66,6 +66,7 @@ jobs:
             echo "Error: Could not extract version from ConsoleTable.csproj"
             exit 1
           fi
+          echo "Found version: $VERSION""
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Get release notes from ChangeLog folder with version
