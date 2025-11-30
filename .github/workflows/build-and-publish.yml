@@ -2,9 +2,9 @@ name: Build, Test and Publish NuGet
 
 on:
   push:
-    branches: [main, master]
+    branches: [master]
   pull_request:
-    branches: [main, master, develop]
+    branches: [master, develop]
 
 jobs:
   build-and-test:
@@ -33,9 +33,9 @@ jobs:
   publish:
     needs: build-and-test
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
     permissions:
       contents: write
-    # if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
 
     steps:
       - name: Checkout repository
