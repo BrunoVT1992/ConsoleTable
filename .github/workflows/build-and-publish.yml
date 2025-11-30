@@ -58,12 +58,14 @@ jobs:
       - name: Publish to NuGet
         run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
-      - name: Parse csproj for Version
-        id: parse_version
-        uses: cschleiden/parse-xml@v1
-        with:
-          file: ConsoleTable.Text/ConsoleTable.Text.csproj
-          xpath: //Version
+      - name: Get version from csproj using PowerShell
+        id: get_version
+        shell: pwsh
+        run: |
+          [xml]$csproj = Get-Content 'ConsoleTable.Text/ConsoleTable.Text.csproj'
+          $version = $csproj.Project.PropertyGroup.Version
+          if (-not $version) { Write-Error "Version not found"; exit 1 }
+          echo "version=$version" >> $env:GITHUB_OUTPUT
 
       # - name: Get version from csproj
       #   id: get_version_and_changelog
@@ -78,7 +80,7 @@ jobs:
       - name: Get release notes from ChangeLog folder with version
         id: get_releasenotes
         run: |
-          VERSION="${{ steps.parse_version.outputs.value }}"
+          VERSION="${{ steps.get_version.outputs.version }}"
           CHANGELOG_FILE="ChangeLogs/${VERSION}-changelog.md"
           if [ ! -f "$CHANGELOG_FILE" ]; then
             echo "Error: Changelog file $CHANGELOG_FILE not found"
@@ -94,8 +96,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.parse_version.outputs.value }}
-          name: Release v${{ steps.parse_version.outputs.value }}
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: Release v${{ steps.get_version.outputs.version }}
           body: v${{ steps.get_releasenotes.outputs.releasenotes }}
         # env:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
