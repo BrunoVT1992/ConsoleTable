@@ -89,5 +89,6 @@ jobs:
           tag_name: v${{ steps.get_version.outputs.version }}
           name: Release v${{ steps.get_version.outputs.version }}
           body: v${{ steps.get_releasenotes.outputs.releasenotes }}
+          files: ""
         # env:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
