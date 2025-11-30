@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace ConsoleTable.Tests;
+namespace ConsoleTable.Text.Tests;
 
 public class TableTests
 {

@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/Tests/">
-    <Project Path="Tests/ConsoleTable.Tests/ConsoleTable.Tests.csproj" />
+    <Project Path="Tests/ConsoleTable.Text.Tests/ConsoleTable.Text.Tests.csproj" />
   </Folder>
-  <Project Path="ConsoleTable.Examples/ConsoleTable.Examples.csproj" />
-  <Project Path="ConsoleTable/ConsoleTable.csproj" />
+  <Project Path="ConsoleTable.Text.Examples/ConsoleTable.Text.Examples.csproj" />
+  <Project Path="ConsoleTable.Text/ConsoleTable.Text.csproj" />
 </Solution>

@@ -1,4 +1,4 @@
-﻿namespace ConsoleTable;
+﻿namespace ConsoleTable.Text;
 
 internal static class TableDrawing
 {

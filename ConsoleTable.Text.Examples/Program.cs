@@ -1,4 +1,4 @@
-﻿namespace ConsoleTable.Examples;
+﻿namespace ConsoleTable.Text.Examples;
 
 class Program
 {

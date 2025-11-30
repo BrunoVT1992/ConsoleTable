@@ -4,38 +4,37 @@ A lightweight .NET library for creating beautifully formatted console tables wit
 
 ## Features
 
-- 📊 Create formatted tables with headers and data rows
-- 🎨 Unicode box-drawing characters for clean borders
-- 🔄 Automatic column width calculation
-- 📏 Configurable cell padding
-- ↔️ Text alignment options (left/right) for headers and rows
-- 📐 Support for varying column counts across rows
-- 🧹 Easy clearing and reusing of tables
-- ⚙️ Simple and intuitive API
-- Optimzed for performance
-- Support for incosistent column count across rows (each row can have its own number of cells).
+- Create formatted tables as a string with headers and data rows
+- Unicode box-drawing characters for clean borders
+- Automatic column width calculation
+- Configurable cell padding
+- Text alignment options (left/right) for headers and rows
+- Easy clearing and reusing of tables
+- Simple and intuitive API
+- Optimized for performance
+- Support for varying column counts across rows (each row can have its own number of cells).
 
 ## Installation
 
 ### Package Manager
 ```
-Install-Package ConsoleTable
+Install-Package ConsoleTable.Text
 ```
 
 ### .NET CLI
 ```
-dotnet add package ConsoleTable
+dotnet add package ConsoleTable.Text
 ```
 
 ### PackageReference
 ```xml
-<PackageReference Include="ConsoleTable" Version="1.0.0" />
+<PackageReference Include="ConsoleTable.Text" Version="1.0.0" />
 ```
 
 ## Quick Start
 
 ```csharp
-using ConsoleTable;
+using ConsoleTable.Text;
 
 var table = new Table();
 
@@ -89,7 +88,7 @@ Output:
 ### Custom Padding
 
 ```csharp
-using ConsoleTable;
+using ConsoleTable.Text;
 
 var table = new Table { Padding = 10 };
 
@@ -118,7 +117,7 @@ Output:
 ### Text Alignment Right
 
 ```csharp
-using ConsoleTable;
+using ConsoleTable.Text;
 
 var table = new Table { HeaderTextAlignmentRight = true, RowTextAlignmentRight = true };
 
@@ -147,7 +146,7 @@ Output:
 ### Table with inconsistent columns across rows
 
 ```csharp
-using ConsoleTable;
+using ConsoleTable.Text;
 
 var table = new Table();
 
@@ -206,7 +205,7 @@ Output:
 ### Write a Table Fluent
 
 ```csharp
-using ConsoleTable;
+using ConsoleTable.Text;
 
  var tableString = new Table()
     .SetHeaders("Name", "Age", "City")
