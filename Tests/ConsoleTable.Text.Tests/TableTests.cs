@@ -5,7 +5,7 @@ namespace ConsoleTable.Text.Tests;
 public class TableTests
 {
     [Fact]
-    public void ToString_EmptyTable_ReturnsEmptyString()
+    public void ToTable_EmptyTable_ReturnsEmptyString()
     {
         var table = new Table();
 
@@ -15,7 +15,7 @@ public class TableTests
     }
 
     [Fact]
-    public void ToString_WithHeadersOnly_ReturnsFormattedTable()
+    public void ToTable_WithHeadersOnly_ReturnsFormattedTable()
     {
         var table = new Table();
         table.SetHeaders("Name", "Age");
@@ -27,7 +27,7 @@ public class TableTests
     }
 
     [Fact]
-    public void ToString_WithRowsOnly_ReturnsFormattedTable()
+    public void ToTable_WithRowsOnly_ReturnsFormattedTable()
     {
         var table = new Table();
         table.AddRow("John", "30");
@@ -42,7 +42,7 @@ public class TableTests
     }
 
     [Fact]
-    public void ToString_WithHeadersAndRows_ReturnsFormattedTable()
+    public void ToTable_WithHeadersAndRows_ReturnsFormattedTable()
     {
         var table = new Table();
         table.SetHeaders("Name", "Age");
@@ -199,7 +199,7 @@ public class TableTests
     }
 
     [Fact]
-    public void ToString_WithSingleColumn_ReturnsProperCorners()
+    public void ToTable_WithSingleColumn_ReturnsProperCorners()
     {
         var table = new Table();
         table.SetHeaders("Single");
@@ -214,7 +214,7 @@ public class TableTests
     }
 
     [Fact]
-    public void ToString_MoreHeadersThanRowColumns_HandlesCorrectly()
+    public void ToTable_MoreHeadersThanRowColumns_HandlesCorrectly()
     {
         var table = new Table();
         table.SetHeaders("Name", "Date", "Number", "Id");
@@ -234,7 +234,7 @@ public class TableTests
     }
 
     [Fact]
-    public void ToString_LessHeadersThanRowColumns_HandlesCorrectly()
+    public void ToTable_LessHeadersThanRowColumns_HandlesCorrectly()
     {
         var table = new Table();
         table.SetHeaders("Name");
@@ -252,7 +252,7 @@ public class TableTests
     }
 
     [Fact]
-    public void ToString_VaryingRowWidths_HandlesCorrectly()
+    public void ToTable_VaryingRowWidths_HandlesCorrectly()
     {
         var table = new Table();
         table.AddRow("short");
@@ -297,7 +297,7 @@ public class TableTests
     }
 
     [Fact]
-    public void ToString_ContainsTableBorderCharacters()
+    public void ToTable_ContainsTableBorderCharacters()
     {
         var table = new Table();
         table.SetHeaders("Header");
@@ -313,7 +313,7 @@ public class TableTests
     }
 
     [Fact]
-    public void ToString_MultipleColumns_ContainsMiddleJoint()
+    public void ToTable_MultipleColumns_ContainsMiddleJoint()
     {
         var table = new Table();
         table.SetHeaders("Col1", "Col2");
@@ -325,7 +325,7 @@ public class TableTests
     }
 
     [Fact]
-    public void ToString_SingleRowSingleColumn_ReturnsValidTable()
+    public void ToTable_SingleRowSingleColumn_ReturnsValidTable()
     {
         var table = new Table();
         table.AddRow("X");
@@ -340,7 +340,7 @@ public class TableTests
     }
 
     [Fact]
-    public void ToString_EmptyStringValues_HandlesCorrectly()
+    public void ToTable_EmptyStringValues_HandlesCorrectly()
     {
         var table = new Table();
         table.SetHeaders("Name", "Value");
