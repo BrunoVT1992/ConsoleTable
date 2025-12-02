@@ -9,7 +9,7 @@ public class TableTests
     {
         var table = new Table();
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Equal(string.Empty, result);
     }
@@ -20,7 +20,7 @@ public class TableTests
         var table = new Table();
         table.SetHeaders("Name", "Age");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("Name", result);
         Assert.Contains("Age", result);
@@ -33,7 +33,7 @@ public class TableTests
         table.AddRow("John", "30");
         table.AddRow("Jane", "25");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("John", result);
         Assert.Contains("Jane", result);
@@ -49,7 +49,7 @@ public class TableTests
         table.AddRow("John", "30");
         table.AddRow("Jane", "25");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("Name", result);
         Assert.Contains("Age", result);
@@ -67,7 +67,7 @@ public class TableTests
 
         table.ClearRows();
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("Name", result);
         Assert.Contains("Age", result);
@@ -85,7 +85,7 @@ public class TableTests
 
         table.Clear();
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Empty(result);
     }
@@ -99,7 +99,7 @@ public class TableTests
         table.ClearRows();
         table.AddRow("Jane");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("Name", result);
         Assert.DoesNotContain("John", result);
@@ -143,8 +143,8 @@ public class TableTests
         table2.SetHeaders("Name");
         table2.AddRow("Test");
 
-        var result1 = table1.ToString();
-        var result2 = table2.ToString();
+        var result1 = table1.ToTable();
+        var result2 = table2.ToTable();
 
         // Table with more padding should have longer lines
         var lines1 = result1.Split('\n', StringSplitOptions.RemoveEmptyEntries);
@@ -160,7 +160,7 @@ public class TableTests
         table.SetHeaders("Name");
         table.AddRow("Test");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("Name", result);
         Assert.Contains("Test", result);
@@ -204,7 +204,7 @@ public class TableTests
         var table = new Table();
         table.SetHeaders("Single");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         // Should have proper corners for single column
         Assert.Contains("┌", result);
@@ -222,7 +222,7 @@ public class TableTests
         table.AddRow("name 2", "date 2");
         table.AddRow("name 3");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("Name", result);
         Assert.Contains("Date", result);
@@ -241,7 +241,7 @@ public class TableTests
         table.AddRow("name 1", "date 1");
         table.AddRow("name 2", "date 2", "1");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("Name", result);
         Assert.Contains("name 1", result);
@@ -259,7 +259,7 @@ public class TableTests
         table.AddRow("much longer text here");
         table.AddRow("mid length");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("short", result);
         Assert.Contains("much longer text here", result);
@@ -273,7 +273,7 @@ public class TableTests
         table.SetHeaders("Old1", "Old2");
         table.SetHeaders("New1", "New2");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.DoesNotContain("Old1", result);
         Assert.DoesNotContain("Old2", result);
@@ -289,7 +289,7 @@ public class TableTests
         table.AddRow("Row2");
         table.AddRow("Row3");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("Row1", result);
         Assert.Contains("Row2", result);
@@ -303,7 +303,7 @@ public class TableTests
         table.SetHeaders("Header");
         table.AddRow("Value");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         // Check for various border characters
         Assert.Contains("│", result);  // Vertical line
@@ -319,7 +319,7 @@ public class TableTests
         table.SetHeaders("Col1", "Col2");
         table.AddRow("Val1", "Val2");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("┼", result);  // Middle joint
     }
@@ -330,7 +330,7 @@ public class TableTests
         var table = new Table();
         table.AddRow("X");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("X", result);
         Assert.Contains("┌", result);
@@ -346,7 +346,7 @@ public class TableTests
         table.SetHeaders("Name", "Value");
         table.AddRow("", "");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("Name", result);
         Assert.Contains("Value", result);
@@ -363,8 +363,8 @@ public class TableTests
         tableRight.SetHeaders("H");
         tableRight.AddRow("VeryLongValue");
 
-        var resultLeft = tableLeft.ToString();
-        var resultRight = tableRight.ToString();
+        var resultLeft = tableLeft.ToTable();
+        var resultRight = tableRight.ToTable();
 
         // Both should contain the header, but in different positions
         Assert.Contains("H", resultLeft);
@@ -383,8 +383,8 @@ public class TableTests
         tableRight.SetHeaders("HeaderHeader");
         tableRight.AddRow("V");
 
-        var resultLeft = tableLeft.ToString();
-        var resultRight = tableRight.ToString();
+        var resultLeft = tableLeft.ToTable();
+        var resultRight = tableRight.ToTable();
 
         // Both should contain the value, but in different positions
         Assert.Contains("V", resultLeft);
@@ -398,7 +398,7 @@ public class TableTests
         var table = new Table();
         table.Headers = new[] { "Name", "Age" };
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("Name", result);
         Assert.Contains("Age", result);
@@ -422,7 +422,7 @@ public class TableTests
         table.Headers = new[] { "Old1", "Old2" };
         table.Headers = new[] { "New1", "New2" };
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.DoesNotContain("Old1", result);
         Assert.DoesNotContain("Old2", result);
@@ -435,10 +435,10 @@ public class TableTests
     {
         var table = new Table();
         table.Headers = new[] { "Header1" };
-        var firstResult = table.ToString();
+        var firstResult = table.ToTable();
 
         table.Headers = new[] { "Header2" };
-        var secondResult = table.ToString();
+        var secondResult = table.ToTable();
 
         Assert.Contains("Header1", firstResult);
         Assert.DoesNotContain("Header1", secondResult);
@@ -455,7 +455,7 @@ public class TableTests
             new[] { "Jane", "25" }
         };
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("John", result);
         Assert.Contains("Jane", result);
@@ -484,7 +484,7 @@ public class TableTests
         table.Rows = new List<string[]> { new[] { "OldRow" } };
         table.Rows = new List<string[]> { new[] { "NewRow" } };
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.DoesNotContain("OldRow", result);
         Assert.Contains("NewRow", result);
@@ -495,10 +495,10 @@ public class TableTests
     {
         var table = new Table();
         table.Rows = new List<string[]> { new[] { "Row1" } };
-        var firstResult = table.ToString();
+        var firstResult = table.ToTable();
 
         table.Rows = new List<string[]> { new[] { "Row2" } };
-        var secondResult = table.ToString();
+        var secondResult = table.ToTable();
 
         Assert.Contains("Row1", firstResult);
         Assert.DoesNotContain("Row1", secondResult);
@@ -512,7 +512,7 @@ public class TableTests
         table.AddRow("InitialRow");
         table.Rows = null;
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Empty(result);
         Assert.NotNull(table.Rows);
@@ -529,7 +529,7 @@ public class TableTests
             new[] { "Row3Col1", "Row3Col2" }
         );
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("Row1Col1", result);
         Assert.Contains("Row2Col1", result);
@@ -546,7 +546,7 @@ public class TableTests
             new[] { "NewRow2" }
         );
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("ExistingRow", result);
         Assert.Contains("NewRow1", result);
@@ -572,7 +572,7 @@ public class TableTests
         var exception = Record.Exception(() => table.AddRows(null));
 
         Assert.Null(exception);
-        var result = table.ToString();
+        var result = table.ToTable();
         Assert.Contains("ExistingRow", result);
     }
 
@@ -581,10 +581,10 @@ public class TableTests
     {
         var table = new Table();
         table.AddRow("InitialRow");
-        var firstResult = table.ToString();
+        var firstResult = table.ToTable();
 
         table.AddRows(new[] { "NewRow" });
-        var secondResult = table.ToString();
+        var secondResult = table.ToTable();
 
         Assert.DoesNotContain("NewRow", firstResult);
         Assert.Contains("NewRow", secondResult);
@@ -598,7 +598,7 @@ public class TableTests
             .AddRows(new[] { "R1C1", "R1C2" }, new[] { "R2C1", "R2C2" })
             .AddRow("R3C1", "R3C2");
 
-        var result = table.ToString();
+        var result = table.ToTable();
 
         Assert.Contains("Col1", result);
         Assert.Contains("R1C1", result);

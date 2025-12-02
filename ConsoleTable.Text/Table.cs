@@ -9,7 +9,7 @@ namespace ConsoleTable.Text
     {
         private string[] _headers;
         /// <summary>
-        /// Gets or sets the headers of the table
+        /// Gets or sets the headers of the table. This is a single optional top row.
         /// </summary>
         public string[] Headers
         {
@@ -108,8 +108,10 @@ namespace ConsoleTable.Text
         /// </summary>
         public Table AddRows(params string[][] rows)
         {
-            if (rows != null)
+            if (rows?.Any() == true)
             {
+                if (_rows == null)
+                    _rows = new List<string[]>();
                 _rows.AddRange(rows);
                 ClearCache();
             }
