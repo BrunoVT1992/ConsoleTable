@@ -605,4 +605,19 @@ public class TableTests
         Assert.Contains("R2C1", result);
         Assert.Contains("R3C1", result);
     }
+
+    [Fact]
+    public void ToString_ReturnsFormattedTable()
+    {
+        var table = new Table();
+        table.SetHeaders("Name", "Age");
+        table.AddRow("John", "30");
+
+        var result = table.ToString();
+
+        Assert.Contains("Name", result);
+        Assert.Contains("Age", result);
+        Assert.Contains("John", result);
+        Assert.Contains("30", result);
+    }
 }

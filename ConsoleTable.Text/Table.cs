@@ -98,6 +98,8 @@ namespace ConsoleTable.Text
         /// </summary>
         public Table AddRow(params string[] row)
         {
+            if (_rows == null)
+                _rows = new List<string[]>();
             _rows.Add(row);
             ClearCache();
             return this;
