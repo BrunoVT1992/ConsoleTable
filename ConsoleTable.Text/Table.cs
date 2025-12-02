@@ -108,7 +108,7 @@ namespace ConsoleTable.Text
         /// </summary>
         public Table AddRows(params string[][] rows)
         {
-            if (rows?.Any() == true)
+            if (rows != null)
             {
                 if (_rows == null)
                     _rows = new List<string[]>();
