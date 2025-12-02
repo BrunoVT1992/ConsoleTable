@@ -8,7 +8,33 @@ namespace ConsoleTable.Text
     public class Table
     {
         private string[] _headers;
+        /// <summary>
+        /// Gets or sets the headers of the table
+        /// </summary>
+        public string[] Headers
+        {
+            get => _headers;
+            set
+            {
+                _headers = value;
+                ClearCache();
+            }
+        }
+
         private List<string[]> _rows = new List<string[]>();
+        /// <summary>
+        /// Gets or sets the rows of the table
+        /// </summary>
+        public List<string[]> Rows
+        {
+            get => _rows;
+            set
+            {
+                _rows = value ?? new List<string[]>();
+                ClearCache();
+            }
+        }
+
         private string _tableCache = null;
 
         private int _padding = 1;
@@ -63,8 +89,7 @@ namespace ConsoleTable.Text
         /// </summary>
         public Table SetHeaders(params string[] headers)
         {
-            _headers = headers;
-            ClearCache();
+            Headers = headers;
             return this;
         }
 
@@ -75,6 +100,19 @@ namespace ConsoleTable.Text
         {
             _rows.Add(row);
             ClearCache();
+            return this;
+        }
+
+        /// <summary>
+        /// Adds multiple rows to the table
+        /// </summary>
+        public Table AddRows(params string[][] rows)
+        {
+            if (rows != null)
+            {
+                _rows.AddRange(rows);
+                ClearCache();
+            }
             return this;
         }
 

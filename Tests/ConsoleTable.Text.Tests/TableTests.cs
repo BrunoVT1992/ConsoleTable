@@ -391,4 +391,218 @@ public class TableTests
         Assert.Contains("V", resultRight);
         Assert.NotEqual(resultLeft, resultRight);
     }
+
+    [Fact]
+    public void Headers_SetProperty_SetsHeadersAndClearsCache()
+    {
+        var table = new Table();
+        table.Headers = new[] { "Name", "Age" };
+
+        var result = table.ToString();
+
+        Assert.Contains("Name", result);
+        Assert.Contains("Age", result);
+    }
+
+    [Fact]
+    public void Headers_GetProperty_ReturnsHeaders()
+    {
+        var table = new Table();
+        table.SetHeaders("Name", "Age");
+
+        var headers = table.Headers;
+
+        Assert.Equal(new[] { "Name", "Age" }, headers);
+    }
+
+    [Fact]
+    public void Headers_SetProperty_OverwritesPreviousHeaders()
+    {
+        var table = new Table();
+        table.Headers = new[] { "Old1", "Old2" };
+        table.Headers = new[] { "New1", "New2" };
+
+        var result = table.ToString();
+
+        Assert.DoesNotContain("Old1", result);
+        Assert.DoesNotContain("Old2", result);
+        Assert.Contains("New1", result);
+        Assert.Contains("New2", result);
+    }
+
+    [Fact]
+    public void Headers_SetProperty_ClearsCache()
+    {
+        var table = new Table();
+        table.Headers = new[] { "Header1" };
+        var firstResult = table.ToString();
+
+        table.Headers = new[] { "Header2" };
+        var secondResult = table.ToString();
+
+        Assert.Contains("Header1", firstResult);
+        Assert.DoesNotContain("Header1", secondResult);
+        Assert.Contains("Header2", secondResult);
+    }
+
+    [Fact]
+    public void Rows_SetProperty_SetsRowsAndClearsCache()
+    {
+        var table = new Table();
+        table.Rows = new List<string[]>
+        {
+            new[] { "John", "30" },
+            new[] { "Jane", "25" }
+        };
+
+        var result = table.ToString();
+
+        Assert.Contains("John", result);
+        Assert.Contains("Jane", result);
+        Assert.Contains("30", result);
+        Assert.Contains("25", result);
+    }
+
+    [Fact]
+    public void Rows_GetProperty_ReturnsRows()
+    {
+        var table = new Table();
+        table.AddRow("John", "30");
+        table.AddRow("Jane", "25");
+
+        var rows = table.Rows;
+
+        Assert.Equal(2, rows.Count);
+        Assert.Equal(new[] { "John", "30" }, rows[0]);
+        Assert.Equal(new[] { "Jane", "25" }, rows[1]);
+    }
+
+    [Fact]
+    public void Rows_SetProperty_OverwritesPreviousRows()
+    {
+        var table = new Table();
+        table.Rows = new List<string[]> { new[] { "OldRow" } };
+        table.Rows = new List<string[]> { new[] { "NewRow" } };
+
+        var result = table.ToString();
+
+        Assert.DoesNotContain("OldRow", result);
+        Assert.Contains("NewRow", result);
+    }
+
+    [Fact]
+    public void Rows_SetProperty_ClearsCache()
+    {
+        var table = new Table();
+        table.Rows = new List<string[]> { new[] { "Row1" } };
+        var firstResult = table.ToString();
+
+        table.Rows = new List<string[]> { new[] { "Row2" } };
+        var secondResult = table.ToString();
+
+        Assert.Contains("Row1", firstResult);
+        Assert.DoesNotContain("Row1", secondResult);
+        Assert.Contains("Row2", secondResult);
+    }
+
+    [Fact]
+    public void Rows_SetNull_CreatesEmptyList()
+    {
+        var table = new Table();
+        table.AddRow("InitialRow");
+        table.Rows = null;
+
+        var result = table.ToString();
+
+        Assert.Empty(result);
+        Assert.NotNull(table.Rows);
+        Assert.Empty(table.Rows);
+    }
+
+    [Fact]
+    public void AddRows_AddsMultipleRows()
+    {
+        var table = new Table();
+        table.AddRows(
+            new[] { "Row1Col1", "Row1Col2" },
+            new[] { "Row2Col1", "Row2Col2" },
+            new[] { "Row3Col1", "Row3Col2" }
+        );
+
+        var result = table.ToString();
+
+        Assert.Contains("Row1Col1", result);
+        Assert.Contains("Row2Col1", result);
+        Assert.Contains("Row3Col1", result);
+    }
+
+    [Fact]
+    public void AddRows_AppendsToExistingRows()
+    {
+        var table = new Table();
+        table.AddRow("ExistingRow");
+        table.AddRows(
+            new[] { "NewRow1" },
+            new[] { "NewRow2" }
+        );
+
+        var result = table.ToString();
+
+        Assert.Contains("ExistingRow", result);
+        Assert.Contains("NewRow1", result);
+        Assert.Contains("NewRow2", result);
+    }
+
+    [Fact]
+    public void AddRows_ReturnsTableInstance()
+    {
+        var table = new Table();
+
+        var result = table.AddRows(new[] { "Row1" }, new[] { "Row2" });
+
+        Assert.Same(table, result);
+    }
+
+    [Fact]
+    public void AddRows_WithNull_DoesNotThrow()
+    {
+        var table = new Table();
+        table.AddRow("ExistingRow");
+
+        var exception = Record.Exception(() => table.AddRows(null));
+
+        Assert.Null(exception);
+        var result = table.ToString();
+        Assert.Contains("ExistingRow", result);
+    }
+
+    [Fact]
+    public void AddRows_ClearsCache()
+    {
+        var table = new Table();
+        table.AddRow("InitialRow");
+        var firstResult = table.ToString();
+
+        table.AddRows(new[] { "NewRow" });
+        var secondResult = table.ToString();
+
+        Assert.DoesNotContain("NewRow", firstResult);
+        Assert.Contains("NewRow", secondResult);
+    }
+
+    [Fact]
+    public void AddRows_ChainedWithOtherMethods()
+    {
+        var table = new Table()
+            .SetHeaders("Col1", "Col2")
+            .AddRows(new[] { "R1C1", "R1C2" }, new[] { "R2C1", "R2C2" })
+            .AddRow("R3C1", "R3C2");
+
+        var result = table.ToString();
+
+        Assert.Contains("Col1", result);
+        Assert.Contains("R1C1", result);
+        Assert.Contains("R2C1", result);
+        Assert.Contains("R3C1", result);
+    }
 }
