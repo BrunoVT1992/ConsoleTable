@@ -7,7 +7,9 @@ namespace ConsoleTable.Text
 {
     public class Table
     {
-        private string[] _headers;
+        private string _tableCache = null;
+
+        private string[] _headers = Array.Empty<string>();
         /// <summary>
         /// Gets or sets the headers of the table. This is a single optional top row.
         /// </summary>
@@ -16,7 +18,7 @@ namespace ConsoleTable.Text
             get => _headers;
             set
             {
-                _headers = value;
+                _headers = value ?? Array.Empty<string>();
                 ClearCache();
             }
         }
@@ -34,8 +36,6 @@ namespace ConsoleTable.Text
                 ClearCache();
             }
         }
-
-        private string _tableCache = null;
 
         private int _padding = 1;
         /// <summary>
@@ -98,9 +98,10 @@ namespace ConsoleTable.Text
         /// </summary>
         public Table AddRow(params string[] row)
         {
-            if (_rows == null)
-                _rows = new List<string[]>();
-            _rows.Add(row);
+            if (Rows == null)
+                Rows = new List<string[]>();
+
+            Rows.Add(row);
             ClearCache();
             return this;
         }
@@ -112,11 +113,13 @@ namespace ConsoleTable.Text
         {
             if (rows != null)
             {
-                if (_rows == null)
-                    _rows = new List<string[]>();
-                _rows.AddRange(rows);
+                if (Rows == null)
+                    Rows = new List<string[]>();
+
+                Rows.AddRange(rows);
                 ClearCache();
             }
+
             return this;
         }
 
@@ -125,8 +128,16 @@ namespace ConsoleTable.Text
         /// </summary>
         public Table ClearRows()
         {
-            _rows.Clear();
-            ClearCache();
+            if (Rows == null)
+            {
+                Rows = new List<string[]>();
+            }
+            else
+            {
+                Rows.Clear();
+                ClearCache();
+            }
+
             return this;
         }
 
@@ -298,18 +309,18 @@ namespace ConsoleTable.Text
             var table = new List<string[]>();
 
             var firstRowIsHeader = false;
-            if (_headers?.Any() == true)
+            if (Headers?.Any() == true)
             {
-                table.Add(_headers);
+                table.Add(Headers);
                 firstRowIsHeader = true;
             }
 
-            if (_rows?.Any() == true)
+            if (Rows?.Any() == true)
             {
-                foreach (var row in _rows)
+                foreach (var row in Rows)
                 {
                     //Weird behaviour with empty rows
-                    if ((row == null || row.Length <= 0) && _headers?.Length > 0)
+                    if ((row == null || row.Length <= 0) && Headers?.Length > 0)
                         table.AddRange(new string[][] { new string[] { " " } });
                     else
                         table.Add(row);

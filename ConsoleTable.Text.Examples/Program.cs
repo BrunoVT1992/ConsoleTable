@@ -6,6 +6,8 @@ class Program
     {
         WriteDefaultTable();
 
+        WriteDefaultTableWithProperties();
+
         WriteTableWithStyling(true, true, 10);
 
         WriteTableWithStyling(false, true, 10);
@@ -35,8 +37,34 @@ class Program
         var table = new Table();
         table.SetHeaders("Name", "Age", "City");
         table.AddRow("Alice Cooper", "30", "New York");
-        table.AddRow("Bob", "25", "Los Angeles");
-        table.AddRow("Charlie Brown", "47", "Chicago");
+
+        var extraRows = new string[][]
+        {
+            new string[] { "Bob", "25", "Los Angeles" },
+            new string[] { "Charlie Brown", "47", "Chicago" }
+        };
+
+        table.AddRows(extraRows);
+
+        Console.WriteLine(table.ToTable());
+        Console.WriteLine();
+    }
+
+    private static void WriteDefaultTableWithProperties()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Default table with properties instead of methods:");
+
+        var table = new Table
+        {
+            Headers = new string[] { "Name", "Age", "City" },
+            Rows = new List<string[]>
+            {
+                new string[] { "Alice Cooper", "30", "New York" },
+                new string[] { "Bob", "25", "Los Angeles" },
+                new string[] { "Charlie Brown", "47", "Chicago" }
+            }
+        };
 
         Console.WriteLine(table.ToTable());
         Console.WriteLine();
@@ -154,8 +182,10 @@ class Program
         var tableString = new Table()
             .SetHeaders("Name", "Age", "City")
             .AddRow("Alice Cooper", "30", "New York")
-            .AddRow("Bob", "25", "Los Angeles")
-            .AddRow("Charlie Brown", "47", "Chicago")
+            .AddRows(
+                new string[] { "Bob", "25", "Los Angeles" },
+                new string[] { "Charlie Brown", "47", "Chicago" }
+            )
             .ToTable();
 
         Console.WriteLine(tableString);
