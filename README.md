@@ -1,4 +1,4 @@
-# ConsoleTable
+# ConsoleTable.Text
 
 A lightweight .NET library for creating beautifully formatted console tables with customizable headers, rows, padding, and text alignment.
 
@@ -13,6 +13,9 @@ A lightweight .NET library for creating beautifully formatted console tables wit
 - Simple and intuitive API
 - Optimized for performance
 - Support for varying column counts across rows (each row can have its own number of cells).
+
+## Releases
+Check releases for the changelog here [https://github.com/BrunoVT1992/ConsoleTable/releases/](https://github.com/BrunoVT1992/ConsoleTable/releases/)
 
 ## Installation
 
@@ -45,12 +48,16 @@ var table = new Table();
 table.SetHeaders("Name", "Age", "City");
 
 // Add rows
-table.AddRow("Alice", "30", "New York");
-table.AddRow("Bob", "25", "Los Angeles");
-table.AddRow("Charlie", "35", "Chicago");
+table.AddRow("Alice Cooper", "30", "New York");
+
+table.AddRows(new string[][]
+{
+    new string[] { "Bob", "25", "Los Angeles" },
+    new string[] { "Charlie Brown", "47", "Chicago" }
+});
 
 // Display the table
-Console.WriteLine(table.ToString());
+Console.WriteLine(table.ToTable());
 ```
 
 Output:
@@ -72,6 +79,8 @@ Output:
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
+| `Headers` | `string[]` | `Array.Empty<string>()` | The table headers. Headers are not required. |
+| `Rows` | `List<string[]>` | `new List<string[]>()` | All the data rows for the table. Rows are not required. |
 | `Padding` | `int` | `1` | The number of spaces on each side of cell content |
 | `HeaderTextAlignmentRight` | `bool` | `false` | When `true`, header text is right-aligned otherwise left aligned |
 | `RowTextAlignmentRight` | `bool` | `false` | When `true`, row text is right-aligned otherwise left aligned |
@@ -82,6 +91,7 @@ Output:
 |--------|-------------|
 | `SetHeaders(params string[] headers)` | Sets the table headers. Calling this again will overwrite previous headers. Headers are not required. |
 | `AddRow(params string[] row)` | Adds a data row to the table. Rows are not required. |
+| `AddRows(params string[][] rows)` | Adds multiple data rows to the table. Rows are not required. |
 | `ClearRows()` | Removes all data rows from the table (headers are preserved). |
 | `Clear()` | Clear all the headers and rows from the table. |
 | `ToTable() / ToString()` | Returns the formatted table as a string. |
@@ -97,9 +107,11 @@ var table = new Table { Padding = 10 };
 
 table.SetHeaders("Name", "Age", "City");
 
-table.AddRow("Alice", "30", "New York");
-table.AddRow("Bob", "25", "Los Angeles");
-table.AddRow("Charlie", "47", "Chicago");
+table.AddRows(
+    new string[] { "Alice", "30", "New York" },
+    new string[] { "Bob", "25", "Los Angeles" },
+    new string[] { "Charlie", "47", "Chicago" }
+);
 
 Console.WriteLine(table.ToTable());
 ```
@@ -126,9 +138,11 @@ var table = new Table { HeaderTextAlignmentRight = true, RowTextAlignmentRight =
 
 table.SetHeaders("Name", "Age", "City");
 
-table.AddRow("Alice Cooper", "30", "New York");
-table.AddRow("Bob", "25", "Los Angeles");
-table.AddRow("Charlie Brown", "47", "Chicago");
+table.AddRows(
+    new string[] { "Alice Cooper", "30", "New York" },
+    new string[] { "Bob", "25", "Los Angeles" },
+    new string[] { "Charlie Brown", "47", "Chicago" }
+);
 
 Console.WriteLine(table.ToTable());
 ```
@@ -145,6 +159,7 @@ Output:
 │ Charlie Brown │  47 │     Chicago │
 └───────────────┴─────┴─────────────┘
 ```
+
 
 ### Table with inconsistent columns across rows
 
@@ -169,7 +184,7 @@ table.AddRow("Nathalie", "29", "Paris", "France", "Europe", "Earth", "Solar Syst
 table.AddRow("Mathias", "37", "Oslo", "Norway", "Europe", "Earth", "Solar System");
 table.AddRow("Kenny", "55", "Tokyo");
 
-Console.WriteLine(table.ToString());
+Console.WriteLine(table.ToTable());
 ```
 
 Output:
@@ -205,6 +220,7 @@ Output:
 └──────────┴─────┴──────────┘
 ```
 
+
 ### Write a Table Fluent
 
 ```csharp
@@ -213,8 +229,10 @@ using ConsoleTable.Text;
  var tableString = new Table()
     .SetHeaders("Name", "Age", "City")
     .AddRow("Alice Cooper", "30", "New York")
-    .AddRow("Bob", "25", "Los Angeles")
-    .AddRow("Charlie Brown", "47", "Chicago")
+    .AddRows(
+        new string[] { "Bob", "25", "Los Angeles" },
+        new string[] { "Charlie Brown", "47", "Chicago" }
+    )
     .ToTable();
 
 Console.WriteLine(tableString);
@@ -232,6 +250,7 @@ Output:
 │ Charlie Brown │ 47  │ Chicago     │
 └───────────────┴─────┴─────────────┘
 ```
+
 
 ## License
 
