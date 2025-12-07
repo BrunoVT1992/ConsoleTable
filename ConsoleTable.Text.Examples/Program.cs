@@ -37,14 +37,11 @@ class Program
         var table = new Table();
         table.SetHeaders("Name", "Age", "City");
         table.AddRow("Alice Cooper", "30", "New York");
-
-        var extraRows = new string[][]
+        table.AddRows(new string[][]
         {
             new string[] { "Bob", "25", "Los Angeles" },
             new string[] { "Charlie Brown", "47", "Chicago" }
-        };
-
-        table.AddRows(extraRows);
+        });
 
         Console.WriteLine(table.ToTable());
         Console.WriteLine();
@@ -93,9 +90,11 @@ class Program
 
         table.SetHeaders("Name", "Age", "City", "Country");
 
-        table.AddRow("Alice Cooper", "30");
-        table.AddRow("Bob", "25");
-        table.AddRow("Charlie Brown", "47");
+        table.AddRows(
+            new string[] { "Alice Cooper", "30" },
+            new string[] { "Bob", "25" },
+            new string[] { "Charlie Brown", "47" }
+        );
 
         Console.WriteLine(table.ToString());
         Console.WriteLine();
@@ -110,9 +109,11 @@ class Program
 
         table.SetHeaders("Name");
 
-        table.AddRow("Alice Cooper", "30", "New York");
-        table.AddRow("Bob", "25", "Los Angeles");
-        table.AddRow("Charlie Brown", "47", "Chicago");
+        table.AddRows(
+            new string[] { "Alice Cooper", "30", "New York" },
+            new string[] { "Bob", "25", "Los Angeles" },
+            new string[] { "Charlie Brown", "47", "Chicago" }
+        );
 
         Console.WriteLine(table.ToString());
         Console.WriteLine();

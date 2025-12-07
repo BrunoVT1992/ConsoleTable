@@ -47,13 +47,11 @@ table.SetHeaders("Name", "Age", "City");
 // Add rows
 table.AddRow("Alice Cooper", "30", "New York");
 
-var extraRows = new string[][]
+table.AddRows(new string[][]
 {
     new string[] { "Bob", "25", "Los Angeles" },
     new string[] { "Charlie Brown", "47", "Chicago" }
-};
-
-table.AddRows(extraRows);
+});
 
 // Display the table
 Console.WriteLine(table.ToTable());
@@ -106,9 +104,11 @@ var table = new Table { Padding = 10 };
 
 table.SetHeaders("Name", "Age", "City");
 
-table.AddRow("Alice", "30", "New York");
-table.AddRow("Bob", "25", "Los Angeles");
-table.AddRow("Charlie", "47", "Chicago");
+table.AddRows(
+    new string[] { "Alice", "30", "New York" },
+    new string[] { "Bob", "25", "Los Angeles" },
+    new string[] { "Charlie", "47", "Chicago" }
+);
 
 Console.WriteLine(table.ToTable());
 ```
@@ -135,9 +135,11 @@ var table = new Table { HeaderTextAlignmentRight = true, RowTextAlignmentRight =
 
 table.SetHeaders("Name", "Age", "City");
 
-table.AddRow("Alice Cooper", "30", "New York");
-table.AddRow("Bob", "25", "Los Angeles");
-table.AddRow("Charlie Brown", "47", "Chicago");
+table.AddRows(
+    new string[] { "Alice Cooper", "30", "New York" },
+    new string[] { "Bob", "25", "Los Angeles" },
+    new string[] { "Charlie Brown", "47", "Chicago" }
+);
 
 Console.WriteLine(table.ToTable());
 ```
