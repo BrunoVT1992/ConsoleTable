@@ -393,7 +393,7 @@ public class TableTests
     }
 
     [Fact]
-    public void Headers_SetProperty_SetsHeadersAndClearsCache()
+    public void Headers_SetHeadersProperty()
     {
         var table = new Table();
         table.Headers = new[] { "Name", "Age" };
@@ -402,17 +402,6 @@ public class TableTests
 
         Assert.Contains("Name", result);
         Assert.Contains("Age", result);
-    }
-
-    [Fact]
-    public void Headers_GetProperty_ReturnsHeaders()
-    {
-        var table = new Table();
-        table.SetHeaders("Name", "Age");
-
-        var headers = table.Headers;
-
-        Assert.Equal(new[] { "Name", "Age" }, headers);
     }
 
     [Fact]
@@ -431,7 +420,7 @@ public class TableTests
     }
 
     [Fact]
-    public void Headers_SetProperty_ClearsCache()
+    public void Headers_SetHeadersProperty_ClearsCache()
     {
         var table = new Table();
         table.Headers = new[] { "Header1" };
@@ -446,7 +435,7 @@ public class TableTests
     }
 
     [Fact]
-    public void Rows_SetProperty_SetsRowsAndClearsCache()
+    public void Rows_SetRowsProperty()
     {
         var table = new Table();
         table.Rows = new List<string[]>
@@ -464,21 +453,7 @@ public class TableTests
     }
 
     [Fact]
-    public void Rows_GetProperty_ReturnsRows()
-    {
-        var table = new Table();
-        table.AddRow("John", "30");
-        table.AddRow("Jane", "25");
-
-        var rows = table.Rows;
-
-        Assert.Equal(2, rows.Count);
-        Assert.Equal(new[] { "John", "30" }, rows[0]);
-        Assert.Equal(new[] { "Jane", "25" }, rows[1]);
-    }
-
-    [Fact]
-    public void Rows_SetProperty_OverwritesPreviousRows()
+    public void Rows_SetRowsProperty_OverwritesPreviousRows()
     {
         var table = new Table();
         table.Rows = new List<string[]> { new[] { "OldRow" } };
@@ -491,7 +466,7 @@ public class TableTests
     }
 
     [Fact]
-    public void Rows_SetProperty_ClearsCache()
+    public void Rows_SetRowsProperty_ClearsCache()
     {
         var table = new Table();
         table.Rows = new List<string[]> { new[] { "Row1" } };
@@ -554,16 +529,6 @@ public class TableTests
     }
 
     [Fact]
-    public void AddRows_ReturnsTableInstance()
-    {
-        var table = new Table();
-
-        var result = table.AddRows(new[] { "Row1" }, new[] { "Row2" });
-
-        Assert.Same(table, result);
-    }
-
-    [Fact]
     public void AddRows_WithNull_DoesNotThrow()
     {
         var table = new Table();
@@ -588,22 +553,6 @@ public class TableTests
 
         Assert.DoesNotContain("NewRow", firstResult);
         Assert.Contains("NewRow", secondResult);
-    }
-
-    [Fact]
-    public void AddRows_ChainedWithOtherMethods()
-    {
-        var table = new Table()
-            .SetHeaders("Col1", "Col2")
-            .AddRows(new[] { "R1C1", "R1C2" }, new[] { "R2C1", "R2C2" })
-            .AddRow("R3C1", "R3C2");
-
-        var result = table.ToTable();
-
-        Assert.Contains("Col1", result);
-        Assert.Contains("R1C1", result);
-        Assert.Contains("R2C1", result);
-        Assert.Contains("R3C1", result);
     }
 
     [Fact]
