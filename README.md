@@ -14,6 +14,9 @@ A lightweight .NET library for creating beautifully formatted console tables wit
 - Optimized for performance
 - Support for varying column counts across rows (each row can have its own number of cells).
 
+## Releases
+Check releases for the changelog here [https://github.com/BrunoVT1992/ConsoleTable/releases/](https://github.com/BrunoVT1992/ConsoleTable/releases/)
+
 ## Installation
 
 ### Package Manager
@@ -33,9 +36,6 @@ dotnet add package ConsoleTable.Text
 
 ### nuget.org
 Download this nuget package from [https://www.nuget.org/packages/ConsoleTable.Text](https://www.nuget.org/packages/ConsoleTable.Text)
-
-## Releases
-Check releases for changes here [https://github.com/BrunoVT1992/ConsoleTable/releases/](https://github.com/BrunoVT1992/ConsoleTable/releases/)
 
 ## Quick Start
 
