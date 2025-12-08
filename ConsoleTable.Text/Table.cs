@@ -369,6 +369,7 @@ namespace ConsoleTable.Text
         {
             SetHeaders(null);
             ClearRows();
+            SetFooters(null);
             ClearCache();
             return this;
         }

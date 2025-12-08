@@ -8,13 +8,15 @@ class Program
 
         WriteDefaultTableWithProperties();
 
-        WriteTableWithStyling(true, true, 10);
+        WriteTableWithStyling(true, true, true, 10);
 
-        WriteTableWithStyling(false, true, 10);
+        WriteTableWithStyling(false, true, true, 10);
 
-        WriteTableWithStyling(true, false, 10);
+        WriteTableWithStyling(true, false, true, 10);
 
-        WriteTableWithStyling(false, false, 10);
+        WriteTableWithStyling(true, true, false, 10);
+
+        WriteTableWithStyling(false, false, false, 10);
 
         WriteTableOnlyHeaders();
 
@@ -40,16 +42,24 @@ class Program
         Console.WriteLine();
         Console.WriteLine("Default table:");
 
+        // Setup the table
         var table = new Table();
+
+        // Set headers
         table.SetHeaders("Name", "Age", "City");
+
+        // Add rows
         table.AddRow("Alice Cooper", "30", "New York");
         table.AddRows(new string[][]
         {
             new string[] { "Bob", "25", "Los Angeles" },
             new string[] { "Charlie Brown", "47", "Chicago" }
         });
+
+        // Set footers
         table.SetFooters("Total: 3", "Total Age: 102");
 
+        // Display the table
         Console.WriteLine(table.ToTable());
         Console.WriteLine();
     }
@@ -83,7 +93,9 @@ class Program
         var table = new Table();
 
         for (int i = 1; i <= 5; i++)
+        {
             table.AddRow($"name {i}", (i * 15).ToString());
+        }
 
         Console.WriteLine(table.ToString());
         Console.WriteLine();
@@ -180,12 +192,13 @@ class Program
         Console.WriteLine();
     }
 
-    private static void WriteTableWithStyling(bool headerTextAlignRight, bool rowTextAlignRight, int padding)
+    private static void WriteTableWithStyling(bool headerTextAlignRight, bool rowTextAlignRight, bool footerTextAlignRight, int padding)
     {
         Console.WriteLine();
         Console.WriteLine($"Table with following styling:");
         Console.WriteLine($"Header text alignment: {(headerTextAlignRight ? "right" : "left")}");
         Console.WriteLine($"Row text alignment: {(rowTextAlignRight ? "right" : "left")}");
+        Console.WriteLine($"Footer text alignment: {(footerTextAlignRight ? "right" : "left")}");
         Console.WriteLine($"Padding: {padding}");
 
         var table = new Table
@@ -193,7 +206,8 @@ class Program
             CachingEnabled = true,
             Padding = padding,
             HeaderTextAlignmentRight = headerTextAlignRight,
-            RowTextAlignmentRight = rowTextAlignRight
+            RowTextAlignmentRight = rowTextAlignRight,
+            FooterTextAlignmentRight = footerTextAlignRight
         };
 
         table.SetHeaders("Name", "Age", "City");
