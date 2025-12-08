@@ -4,6 +4,46 @@ namespace ConsoleTable.Text.Tests;
 
 public class TableTests
 {
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void PerformanceCheck(bool cacheEnabled)
+    {
+        var table = new Table
+        {
+            CachingEnabled = cacheEnabled,
+            HeaderTextAlignmentRight = true,
+            RowTextAlignmentRight = false,
+            Padding = 5
+        };
+
+        var columnCount = 100;
+        var headers = new List<string>();
+        for (var columnPos = 1; columnPos <= columnCount; columnPos++)
+        {
+            headers.Add($"Header {columnPos}");
+        }
+        table.Headers = headers.ToArray();
+
+        var rows = new List<string[]>();
+        for (var rowPos = 1; rowPos <= 100000; rowPos++)
+        {
+            var row = new string[columnCount];
+            for (var columnPos = 1; columnPos <= columnCount; columnPos++)
+            {
+                row[columnPos - 1] = $"Row {rowPos} -> Column {columnPos}";
+            }
+            rows.Add(row);
+        }
+        table.Rows = rows;
+
+        var tableResult1 = table.ToTable();
+        Assert.NotEmpty(tableResult1);
+
+        var tableResult2 = table.ToTable();
+        Assert.NotEmpty(tableResult2);
+    }
+
     [Fact]
     public void ToTable_EmptyTable_ReturnsEmptyString()
     {
@@ -553,6 +593,43 @@ public class TableTests
 
         Assert.DoesNotContain("NewRow", firstResult);
         Assert.Contains("NewRow", secondResult);
+    }
+
+    [Fact]
+    public void ClearCache()
+    {
+        var table = new Table
+        {
+            CachingEnabled = true
+        };
+
+        table.AddRow("1");
+        var firstResult = table.ToTable();
+
+        table.ClearCache();
+        var secondResult = table.ToTable();
+
+        Assert.Contains("1", firstResult);
+        Assert.Contains("1", secondResult);
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void CachingEnabled(bool cachingEnabled)
+    {
+        var table = new Table
+        {
+            CachingEnabled = cachingEnabled
+        };
+
+        table.AddRow("1");
+
+        var firstResult = table.ToTable();
+        var secondResult = table.ToTable();
+
+        Assert.Contains("1", firstResult);
+        Assert.Contains("1", secondResult);
     }
 
     [Fact]

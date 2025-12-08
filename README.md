@@ -84,6 +84,7 @@ Output:
 | `Padding` | `int` | `1` | The number of spaces on each side of cell content |
 | `HeaderTextAlignmentRight` | `bool` | `false` | When `true`, header text is right-aligned otherwise left aligned |
 | `RowTextAlignmentRight` | `bool` | `false` | When `true`, row text is right-aligned otherwise left aligned |
+| `CachingEnabled` | `bool` | `true` | When `true`, the generated table string is cached when the ToTable method is called. Cache will be cleared on any property change or method call. |
 
 ### Methods
 
@@ -94,6 +95,7 @@ Output:
 | `AddRows(params string[][] rows)` | Adds multiple data rows to the table. Rows are not required. |
 | `ClearRows()` | Removes all data rows from the table (headers are preserved). |
 | `Clear()` | Clear all the headers and rows from the table. |
+| `ClearCache()` | Clears the generated table string cache. This can be done to save memory. |
 | `ToTable() / ToString()` | Returns the formatted table as a string. |
 
 ## Examples
