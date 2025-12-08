@@ -37,6 +37,13 @@ public class TableTests
         }
         table.Rows = rows;
 
+        var footers = new List<string>();
+        for (var columnPos = 1; columnPos <= columnCount; columnPos++)
+        {
+            footers.Add($"Footer {columnPos}");
+        }
+        table.Footers = footers.ToArray();
+
         var tableResult1 = table.ToTable();
         Assert.NotEmpty(tableResult1);
 

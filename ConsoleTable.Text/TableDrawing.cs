@@ -12,6 +12,8 @@
         public const string MiddleJoint = "┼";
         public const string RightJoint = "┤";
         public const char HorizontalLine = '─';
+        public const char HorizontalHeaderLine = '═';
         public const string VerticalLine = "│";
+        public const string EmptySpace = " ";
     }
 }

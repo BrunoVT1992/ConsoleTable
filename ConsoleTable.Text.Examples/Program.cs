@@ -16,7 +16,11 @@ class Program
 
         WriteTableWithStyling(false, false, 10);
 
-        WriteTableWithoutHeaders();
+        WriteTableOnlyHeaders();
+
+        WriteTableOnlyRows();
+
+        WriteTableOnlyFooters();
 
         WriteTableMoreHeaders();
 
@@ -26,7 +30,7 @@ class Program
 
         WriteTableFluent();
 
-        WriteBigTable();
+        //WriteBigTable();
 
         Console.Read();
     }
@@ -44,6 +48,7 @@ class Program
             new string[] { "Bob", "25", "Los Angeles" },
             new string[] { "Charlie Brown", "47", "Chicago" }
         });
+        table.SetFooters("Total: 3", "Total Age: 102");
 
         Console.WriteLine(table.ToTable());
         Console.WriteLine();
@@ -70,15 +75,39 @@ class Program
         Console.WriteLine();
     }
 
-    private static void WriteTableWithoutHeaders()
+    private static void WriteTableOnlyRows()
     {
         Console.WriteLine();
-        Console.WriteLine("Table without headers:");
+        Console.WriteLine("Table only rows:");
 
         var table = new Table();
 
         for (int i = 1; i <= 5; i++)
             table.AddRow($"name {i}", (i * 15).ToString());
+
+        Console.WriteLine(table.ToString());
+        Console.WriteLine();
+    }
+
+    private static void WriteTableOnlyHeaders()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Table only headers:");
+
+        var table = new Table();
+        table.SetHeaders("Name", "Age", "City");
+
+        Console.WriteLine(table.ToString());
+        Console.WriteLine();
+    }
+
+    private static void WriteTableOnlyFooters()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Table only footers:");
+
+        var table = new Table();
+        table.SetFooters("Total: 3", "Total Age: 102");
 
         Console.WriteLine(table.ToString());
         Console.WriteLine();
@@ -145,6 +174,8 @@ class Program
         table.AddRow("Mathias", "37", "Oslo", "Norway", "Europe", "Earth", "Solar System");
         table.AddRow("Kenny", "55", "Tokyo");
 
+        table.SetFooters("Footer 1", "Footer 2");
+
         Console.WriteLine(table.ToString());
         Console.WriteLine();
     }
@@ -175,6 +206,8 @@ class Program
                 table.AddRow($"Very Long Name {i}", (i * 8).ToString(), $"City {i}");
         }
 
+        table.SetFooters("Footer 1", "Footer 2", "Footer 3");
+
         Console.WriteLine(table.ToString());
         Console.WriteLine();
     }
@@ -191,6 +224,7 @@ class Program
                 new string[] { "Bob", "25", "Los Angeles" },
                 new string[] { "Charlie Brown", "47", "Chicago" }
             )
+            .SetFooters("Total: 3", "Total Age: 102")
             .ToTable();
 
         Console.WriteLine(tableString);
@@ -229,6 +263,13 @@ class Program
             rows.Add(row);
         }
         table.Rows = rows;
+
+        var footers = new List<string>();
+        for (var columnPos = 1; columnPos <= columnCount; columnPos++)
+        {
+            footers.Add($"Footer {columnPos}");
+        }
+        table.Footers = footers.ToArray();
 
         var tableString = table.ToTable();
 

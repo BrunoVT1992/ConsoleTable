@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -54,6 +55,20 @@ namespace ConsoleTable.Text
             }
         }
 
+        private string[] _footers = Array.Empty<string>();
+        /// <summary>
+        /// Gets or sets the footers of the table. This is a single optional bottom row without a border.
+        /// </summary>
+        public string[] Footers
+        {
+            get => _footers;
+            set
+            {
+                _footers = value ?? Array.Empty<string>();
+                ClearCache();
+            }
+        }
+
         private int _padding = 1;
         /// <summary>
         /// Gets or sets the amount of padding in spaces left and right of the rows cell content. Default is 1
@@ -71,17 +86,17 @@ namespace ConsoleTable.Text
             }
         }
 
-        private bool headerTextAlignmentRight;
+        private bool _headerTextAlignmentRight;
         /// <summary>
         /// Gets or sets a value indicating whether the header text is aligned to the right or left
         /// </summary>
         public bool HeaderTextAlignmentRight
         {
             get =>
-                headerTextAlignmentRight;
+                _headerTextAlignmentRight;
             set
             {
-                headerTextAlignmentRight = value;
+                _headerTextAlignmentRight = value;
                 ClearCache();
             }
         }
@@ -89,14 +104,27 @@ namespace ConsoleTable.Text
         /// <summary>
         /// Gets or sets a value indicating whether the row text is aligned to the right or left
         /// </summary>
-        private bool rowTextAlignmentRight;
+        private bool _rowTextAlignmentRight;
         public bool RowTextAlignmentRight
         {
-            get =>
-                rowTextAlignmentRight;
+            get => _rowTextAlignmentRight;
             set
             {
-                rowTextAlignmentRight = value;
+                _rowTextAlignmentRight = value;
+                ClearCache();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the footer text is aligned to the right or left
+        /// </summary>
+        private bool _footerTextAlignmentRight;
+        public bool FooterTextAlignmentRight
+        {
+            get => _footerTextAlignmentRight;
+            set
+            {
+                _footerTextAlignmentRight = value;
                 ClearCache();
             }
         }
@@ -107,6 +135,15 @@ namespace ConsoleTable.Text
         public Table SetHeaders(params string[] headers)
         {
             Headers = headers;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the footers of the table. Overwrites them each time.
+        /// </summary>
+        public Table SetFooters(params string[] footers)
+        {
+            Footers = footers;
             return this;
         }
 
@@ -158,8 +195,25 @@ namespace ConsoleTable.Text
             return this;
         }
 
-        private int[] GetMaxCellWidths(List<string[]> table)
+        private int[] GetMaxCellWidths()
         {
+            var table = new List<string[]>();
+
+            if (Headers?.Length > 0)
+            {
+                table.Add(Headers);
+            }
+
+            if (Rows?.Any() == true)
+            {
+                table.AddRange(Rows);
+            }
+
+            if (Footers?.Length > 0)
+            {
+                table.Add(Footers);
+            }
+
             var maximumColumns = 0;
             foreach (var row in table)
             {
@@ -168,7 +222,7 @@ namespace ConsoleTable.Text
             }
 
             var maximumCellWidths = new int[maximumColumns];
-            for (int i = 0; i < maximumCellWidths.Count(); i++)
+            for (int i = 0; i < maximumCellWidths.Length; i++)
                 maximumCellWidths[i] = 0;
 
             var paddingCount = 0;
@@ -209,24 +263,24 @@ namespace ConsoleTable.Text
             return formattedTable;
         }
 
-        private StringBuilder CreateBottomLine(int[] maximumCellWidths, int rowColumnCount, StringBuilder formattedTable)
+        private StringBuilder CreateBottomLine(int[] maximumCellWidths, int rowColumnCount, char horizontalLine, StringBuilder formattedTable)
         {
             for (int i = 0; i < rowColumnCount; i++)
             {
                 if (i == 0 && i == rowColumnCount - 1)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.BottomLeftJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.BottomRightJoint));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.BottomLeftJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine), TableDrawing.BottomRightJoint));
                 else if (i == 0)
-                    formattedTable.Append(string.Format("{0}{1}", TableDrawing.BottomLeftJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
+                    formattedTable.Append(string.Format("{0}{1}", TableDrawing.BottomLeftJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine)));
                 else if (i == rowColumnCount - 1)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.BottomRightJoint));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine), TableDrawing.BottomRightJoint));
                 else
-                    formattedTable.Append(string.Format("{0}{1}", TableDrawing.BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
+                    formattedTable.Append(string.Format("{0}{1}", TableDrawing.BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine)));
             }
 
             return formattedTable;
         }
 
-        private StringBuilder CreateValueLine(int[] maximumCellWidths, string[] row, bool alignRight, StringBuilder formattedTable)
+        private StringBuilder CreateValueLine(int[] maximumCellWidths, string[] row, bool alignRight, string verticalLine, StringBuilder formattedTable)
         {
             int cellIndex = 0;
             int lastCellIndex = row.Length - 1;
@@ -244,13 +298,13 @@ namespace ConsoleTable.Text
                 var cellValue = alignRight ? column.PadLeft(restWidth, ' ') : column.PadRight(restWidth, ' ');
 
                 if (cellIndex == 0 && cellIndex == lastCellIndex)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", TableDrawing.VerticalLine, paddingString, cellValue, paddingString, TableDrawing.VerticalLine));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", verticalLine, paddingString, cellValue, paddingString, verticalLine));
                 else if (cellIndex == 0)
-                    formattedTable.Append(string.Format("{0}{1}{2}{3}", TableDrawing.VerticalLine, paddingString, cellValue, paddingString));
+                    formattedTable.Append(string.Format("{0}{1}{2}{3}", verticalLine, paddingString, cellValue, paddingString));
                 else if (cellIndex == lastCellIndex)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", TableDrawing.VerticalLine, paddingString, cellValue, paddingString, TableDrawing.VerticalLine));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", verticalLine, paddingString, cellValue, paddingString, verticalLine));
                 else
-                    formattedTable.Append(string.Format("{0}{1}{2}{3}", TableDrawing.VerticalLine, paddingString, cellValue, paddingString));
+                    formattedTable.Append(string.Format("{0}{1}{2}{3}", verticalLine, paddingString, cellValue, paddingString));
 
                 cellIndex++;
             }
@@ -258,7 +312,7 @@ namespace ConsoleTable.Text
             return formattedTable;
         }
 
-        private StringBuilder CreateSeperatorLine(int[] maximumCellWidths, int previousRowColumnCount, int rowColumnCount, StringBuilder formattedTable)
+        private StringBuilder CreateSeperatorLine(int[] maximumCellWidths, int previousRowColumnCount, int rowColumnCount, char horizontalLine, StringBuilder formattedTable)
         {
             var maximumCells = Math.Max(previousRowColumnCount, rowColumnCount);
 
@@ -266,33 +320,33 @@ namespace ConsoleTable.Text
             {
                 if (i == 0 && i == maximumCells - 1)
                 {
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.LeftJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.RightJoint));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.LeftJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine), TableDrawing.RightJoint));
                 }
                 else if (i == 0)
                 {
-                    formattedTable.Append(string.Format("{0}{1}", TableDrawing.LeftJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
+                    formattedTable.Append(string.Format("{0}{1}", TableDrawing.LeftJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine)));
                 }
                 else if (i == maximumCells - 1)
                 {
                     if (i > previousRowColumnCount)
-                        formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.TopJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.TopRightJoint));
+                        formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.TopJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine), TableDrawing.TopRightJoint));
                     else if (i > rowColumnCount)
-                        formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.BottomRightJoint));
+                        formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine), TableDrawing.BottomRightJoint));
                     else if (i > previousRowColumnCount - 1)
-                        formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.TopRightJoint));
+                        formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine), TableDrawing.TopRightJoint));
                     else if (i > rowColumnCount - 1)
-                        formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.BottomRightJoint));
+                        formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine), TableDrawing.BottomRightJoint));
                     else
-                        formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine), TableDrawing.RightJoint));
+                        formattedTable.AppendLine(string.Format("{0}{1}{2}", TableDrawing.MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine), TableDrawing.RightJoint));
                 }
                 else
                 {
                     if (i > previousRowColumnCount)
-                        formattedTable.Append(string.Format("{0}{1}", TableDrawing.TopJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
+                        formattedTable.Append(string.Format("{0}{1}", TableDrawing.TopJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine)));
                     else if (i > rowColumnCount)
-                        formattedTable.Append(string.Format("{0}{1}", TableDrawing.BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
+                        formattedTable.Append(string.Format("{0}{1}", TableDrawing.BottomJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine)));
                     else
-                        formattedTable.Append(string.Format("{0}{1}", TableDrawing.MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], TableDrawing.HorizontalLine)));
+                        formattedTable.Append(string.Format("{0}{1}", TableDrawing.MiddleJoint, string.Empty.PadLeft(maximumCellWidths[i], horizontalLine)));
                 }
             }
 
@@ -327,64 +381,84 @@ namespace ConsoleTable.Text
             if (CachingEnabled && !string.IsNullOrEmpty(_tableCache))
                 return _tableCache;
 
-            var table = new List<string[]>();
-
-            var firstRowIsHeader = false;
-            if (Headers?.Any() == true)
-            {
-                table.Add(Headers);
-                firstRowIsHeader = true;
-            }
-
             if (Rows?.Any() == true)
             {
-                foreach (var row in Rows)
+                for (int rowIndex = 0; rowIndex < Rows.Count; rowIndex++)
                 {
-                    //Weird behaviour with empty rows
-                    if ((row == null || row.Length <= 0) && Headers?.Length > 0)
-                        table.AddRange(new string[][] { new string[] { " " } });
-                    else
-                        table.Add(row);
+                    var row = Rows[rowIndex];
+                    //Weird behaviour with empty rows. So we create 1 column with a space inside.
+                    if ((row == null || row.Length <= 0))
+                        Rows[rowIndex] = new string[] { " " };
                 }
             }
 
-            if (!table.Any())
+            if (Headers?.Any() != true && Rows?.Any() != true && Footers?.Any() != true)
                 return string.Empty;
 
             var formattedTable = new StringBuilder();
 
-            var previousRow = table.First();
-            var nextRow = table.First();
+            int[] maximumCellWidths = GetMaxCellWidths();
 
-            int[] maximumCellWidths = GetMaxCellWidths(table);
+            var topLineCreated = false;
+            var previousRow = Array.Empty<string>();
+            var nextRow = Array.Empty<string>();
 
-            formattedTable = CreateTopLine(maximumCellWidths, nextRow.Count(), formattedTable);
-
-            int rowIndex = 0;
-            int lastRowIndex = table.Count - 1;
-
-            for (int i = 0; i < table.Count; i++)
+            if (Headers?.Any() == true)
             {
-                var row = table[i];
+                formattedTable = CreateTopLine(maximumCellWidths, Headers.Count(), formattedTable);
+                topLineCreated = true;
 
-                var align = RowTextAlignmentRight;
-                if (i == 0 && firstRowIsHeader)
-                    align = HeaderTextAlignmentRight;
+                formattedTable = CreateValueLine(maximumCellWidths, Headers, HeaderTextAlignmentRight, TableDrawing.VerticalLine, formattedTable);
 
-                formattedTable = CreateValueLine(maximumCellWidths, row, align, formattedTable);
+                previousRow = Headers;
 
-                previousRow = row;
-
-                if (rowIndex != lastRowIndex)
+                //When there are no rows immediatly draw the bottom line after the header
+                if (Rows?.Any() == true)
                 {
-                    nextRow = table[rowIndex + 1];
-                    formattedTable = CreateSeperatorLine(maximumCellWidths, previousRow.Count(), nextRow.Count(), formattedTable);
+                    nextRow = Rows.First();
+                    formattedTable = CreateSeperatorLine(maximumCellWidths, previousRow.Count(), nextRow.Count(), TableDrawing.HorizontalHeaderLine, formattedTable);
                 }
-
-                rowIndex++;
+                else
+                {
+                    formattedTable = CreateBottomLine(maximumCellWidths, Headers.Count(), TableDrawing.HorizontalHeaderLine, formattedTable);
+                }
             }
 
-            formattedTable = CreateBottomLine(maximumCellWidths, previousRow.Count(), formattedTable);
+            if (Rows?.Any() == true)
+            {
+                if (!topLineCreated)
+                {
+                    formattedTable = CreateTopLine(maximumCellWidths, Rows.First().Count(), formattedTable);
+                    topLineCreated = true;
+                }
+
+                int rowIndex = 0;
+                int lastRowIndex = Rows.Count - 1;
+
+                for (int i = 0; i < Rows.Count; i++)
+                {
+                    var row = Rows[i];
+
+                    formattedTable = CreateValueLine(maximumCellWidths, row, RowTextAlignmentRight, TableDrawing.VerticalLine, formattedTable);
+
+                    previousRow = row;
+
+                    if (rowIndex != lastRowIndex)
+                    {
+                        nextRow = Rows[rowIndex + 1];
+                        formattedTable = CreateSeperatorLine(maximumCellWidths, previousRow.Count(), nextRow.Count(), TableDrawing.HorizontalLine, formattedTable);
+                    }
+
+                    rowIndex++;
+                }
+
+                formattedTable = CreateBottomLine(maximumCellWidths, previousRow.Count(), TableDrawing.HorizontalLine, formattedTable);
+            }
+
+            if (Footers?.Any() == true)
+            {
+                formattedTable = CreateValueLine(maximumCellWidths, Footers, FooterTextAlignmentRight, TableDrawing.EmptySpace, formattedTable);
+            }
 
             var generatedTable = formattedTable.ToString();
 
