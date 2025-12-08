@@ -589,6 +589,81 @@ public class TableTests
     }
 
     [Fact]
+    public void Footers_SetFootersProperty_RendersInTable()
+    {
+        var table = new Table();
+        table.SetHeaders("Name", "Age");
+        table.AddRow("John", "30");
+        table.Footers = new[] { "Total", "1" };
+
+        var result = table.ToTable();
+
+        Assert.Contains("Total", result);
+        Assert.Contains("1", result);
+    }
+
+    [Fact]
+    public void SetFooters_OverwritesPreviousFooters()
+    {
+        var table = new Table();
+        table.SetHeaders("Name");
+        table.AddRow("John");
+        table.SetFooters("OldFooter");
+        table.SetFooters("NewFooter");
+
+        var result = table.ToTable();
+
+        Assert.DoesNotContain("OldFooter", result);
+        Assert.Contains("NewFooter", result);
+    }
+
+    [Fact]
+    public void Footers_ClearFooters_RemovesFootersFromTable()
+    {
+        var table = new Table();
+        table.SetHeaders("Name");
+        table.AddRow("John");
+        table.SetFooters("Footer");
+        table.Footers = null;
+
+        var result = table.ToTable();
+
+        Assert.DoesNotContain("Footer", result);
+    }
+
+    [Fact]
+    public void ToTable_WithHeadersRowsAndFooters_RendersAll()
+    {
+        var table = new Table();
+        table.SetHeaders("Name", "Age");
+        table.AddRow("John", "30");
+        table.SetFooters("Total", "1");
+
+        var result = table.ToTable();
+
+        Assert.Contains("Name", result);
+        Assert.Contains("Age", result);
+        Assert.Contains("John", result);
+        Assert.Contains("30", result);
+        Assert.Contains("Total", result);
+        Assert.Contains("1", result);
+    }
+
+    [Fact]
+    public void SetFooters_NullOrEmpty_DoesNotThrow()
+    {
+        var table = new Table();
+        table.SetHeaders("Name");
+        table.AddRow("John");
+
+        var exception = Record.Exception(() => table.SetFooters(null));
+        Assert.Null(exception);
+
+        exception = Record.Exception(() => table.SetFooters());
+        Assert.Null(exception);
+    }
+
+    [Fact]
     public void AddRows_ClearsCache()
     {
         var table = new Table();
