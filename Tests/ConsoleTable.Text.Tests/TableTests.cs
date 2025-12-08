@@ -11,7 +11,7 @@ public class TableTests
     {
         var table = new Table
         {
-            CachingEabled = cacheEnabled,
+            CachingEnabled = cacheEnabled,
             HeaderTextAlignmentRight = true,
             RowTextAlignmentRight = false,
             Padding = 5
@@ -19,19 +19,19 @@ public class TableTests
 
         var columnCount = 100;
         var headers = new List<string>();
-        for (var i = 1; i <= columnCount; i++)
+        for (var columnPos = 1; columnPos <= columnCount; columnPos++)
         {
-            headers.Add($"Header{i}");
+            headers.Add($"Header {columnPos}");
         }
         table.Headers = headers.ToArray();
 
         var rows = new List<string[]>();
-        for (var i = 0; i < 100000; i++)
+        for (var rowPos = 1; rowPos <= 100000; rowPos++)
         {
             var row = new string[columnCount];
-            for (var j = 1; j <= columnCount; j++)
+            for (var columnPos = 1; columnPos <= columnCount; columnPos++)
             {
-                row[j - 1] = $"Row {i} -> Column {j}";
+                row[columnPos - 1] = $"Row {rowPos} -> Column {columnPos}";
             }
             rows.Add(row);
         }
@@ -600,7 +600,7 @@ public class TableTests
     {
         var table = new Table
         {
-            CachingEabled = true
+            CachingEnabled = true
         };
 
         table.AddRow("1");
@@ -620,7 +620,7 @@ public class TableTests
     {
         var table = new Table
         {
-            CachingEabled = cachingEnabled
+            CachingEnabled = cachingEnabled
         };
 
         table.AddRow("1");

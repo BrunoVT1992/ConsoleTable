@@ -84,7 +84,7 @@ Output:
 | `Padding` | `int` | `1` | The number of spaces on each side of cell content |
 | `HeaderTextAlignmentRight` | `bool` | `false` | When `true`, header text is right-aligned otherwise left aligned |
 | `RowTextAlignmentRight` | `bool` | `false` | When `true`, row text is right-aligned otherwise left aligned |
-| `CachingEabled` | `bool` | `true` | When `true`, the generated table string is cached when the ToTable method is called. Cache will be cleared on any property change or method call. |
+| `CachingEnabled` | `bool` | `true` | When `true`, the generated table string is cached when the ToTable method is called. Cache will be cleared on any property change or method call. |
 
 ### Methods
 

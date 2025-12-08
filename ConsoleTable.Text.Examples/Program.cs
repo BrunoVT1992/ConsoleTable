@@ -26,6 +26,8 @@ class Program
 
         WriteTableFluent();
 
+        WriteBigTable();
+
         Console.Read();
     }
 
@@ -54,7 +56,7 @@ class Program
 
         var table = new Table
         {
-            CachingEabled = true,
+            CachingEnabled = true,
             Headers = new string[] { "Name", "Age", "City" },
             Rows = new List<string[]>
             {
@@ -157,7 +159,7 @@ class Program
 
         var table = new Table
         {
-            CachingEabled = true,
+            CachingEnabled = true,
             Padding = padding,
             HeaderTextAlignmentRight = headerTextAlignRight,
             RowTextAlignmentRight = rowTextAlignRight
@@ -190,6 +192,45 @@ class Program
                 new string[] { "Charlie Brown", "47", "Chicago" }
             )
             .ToTable();
+
+        Console.WriteLine(tableString);
+        Console.WriteLine();
+    }
+
+    private static void WriteBigTable()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Big table (may take some seconds to generate):");
+
+        var table = new Table
+        {
+            CachingEnabled = true,
+            HeaderTextAlignmentRight = false,
+            RowTextAlignmentRight = false,
+            Padding = 2
+        };
+
+        var columnCount = 5;
+        var headers = new List<string>();
+        for (var columnPos = 1; columnPos <= columnCount; columnPos++)
+        {
+            headers.Add($"Header {columnPos}");
+        }
+        table.Headers = headers.ToArray();
+
+        var rows = new List<string[]>();
+        for (var rowPos = 1; rowPos <= 100000; rowPos++)
+        {
+            var row = new string[columnCount];
+            for (var columnPos = 1; columnPos <= columnCount; columnPos++)
+            {
+                row[columnPos - 1] = $"Row {rowPos} -> Column {columnPos}";
+            }
+            rows.Add(row);
+        }
+        table.Rows = rows;
+
+        var tableString = table.ToTable();
 
         Console.WriteLine(tableString);
         Console.WriteLine();

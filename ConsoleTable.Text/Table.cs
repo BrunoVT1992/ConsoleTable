@@ -9,19 +9,19 @@ namespace ConsoleTable.Text
     {
         private string _tableCache = null;
 
-        private bool _cachingEabled = true;
+        private bool _cachingEnabled = true;
         /// <summary>
         /// Enables the caching of the generated table string when the ToTable method is called. Default is true.
         /// Cache will be cleared on any property change or method call.
         /// </summary>
-        public bool CachingEabled
+        public bool CachingEnabled
         {
-            get => _cachingEabled;
+            get => _cachingEnabled;
             set
             {
-                _cachingEabled = value;
+                _cachingEnabled = value;
 
-                if (!_cachingEabled)
+                if (!_cachingEnabled)
                     ClearCache();
             }
         }
@@ -324,7 +324,7 @@ namespace ConsoleTable.Text
         /// </summary>
         public string ToTable()
         {
-            if (CachingEabled && !string.IsNullOrEmpty(_tableCache))
+            if (CachingEnabled && !string.IsNullOrEmpty(_tableCache))
                 return _tableCache;
 
             var table = new List<string[]>();
@@ -388,7 +388,7 @@ namespace ConsoleTable.Text
 
             var generatedTable = formattedTable.ToString();
 
-            if (CachingEabled)
+            if (CachingEnabled)
                 _tableCache = generatedTable;
 
             return generatedTable;
