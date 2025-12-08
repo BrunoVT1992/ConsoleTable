@@ -9,6 +9,23 @@ namespace ConsoleTable.Text
     {
         private string _tableCache = null;
 
+        private bool _cachingEabled = true;
+        /// <summary>
+        /// Enables the caching of the generated table string when the ToTable method is called. Default is true.
+        /// Cache will be cleared on any property change or method call.
+        /// </summary>
+        public bool CachingEabled
+        {
+            get => _cachingEabled;
+            set
+            {
+                _cachingEabled = value;
+
+                if (!_cachingEabled)
+                    ClearCache();
+            }
+        }
+
         private string[] _headers = Array.Empty<string>();
         /// <summary>
         /// Gets or sets the headers of the table. This is a single optional top row.
@@ -282,9 +299,13 @@ namespace ConsoleTable.Text
             return formattedTable;
         }
 
-        private void ClearCache()
+        /// <summary>
+        /// Clears the cached generated table string
+        /// </summary>
+        public Table ClearCache()
         {
             _tableCache = null;
+            return this;
         }
 
         /// <summary>
@@ -303,7 +324,7 @@ namespace ConsoleTable.Text
         /// </summary>
         public string ToTable()
         {
-            if (!string.IsNullOrEmpty(_tableCache))
+            if (CachingEabled && !string.IsNullOrEmpty(_tableCache))
                 return _tableCache;
 
             var table = new List<string[]>();
@@ -365,9 +386,12 @@ namespace ConsoleTable.Text
 
             formattedTable = CreateBottomLine(maximumCellWidths, previousRow.Count(), formattedTable);
 
-            _tableCache = formattedTable.ToString();
+            var generatedTable = formattedTable.ToString();
 
-            return _tableCache;
+            if (CachingEabled)
+                _tableCache = generatedTable;
+
+            return generatedTable;
         }
 
         public override string ToString()

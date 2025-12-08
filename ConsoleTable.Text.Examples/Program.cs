@@ -54,6 +54,7 @@ class Program
 
         var table = new Table
         {
+            CachingEabled = true,
             Headers = new string[] { "Name", "Age", "City" },
             Rows = new List<string[]>
             {
@@ -156,6 +157,7 @@ class Program
 
         var table = new Table
         {
+            CachingEabled = true,
             Padding = padding,
             HeaderTextAlignmentRight = headerTextAlignRight,
             RowTextAlignmentRight = rowTextAlignRight
