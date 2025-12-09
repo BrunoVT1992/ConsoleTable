@@ -5,7 +5,7 @@
 
 		<!-- NuGet Package Metadata -->
 		<PackageId>ConsoleTable.Text</PackageId>
-		<Version>1.1.0</Version>
+		<Version>2.0.0</Version>
 		<Authors>Bruno Van Thournout</Authors>
 		<Description>A library for creating a formatted string tables with customizable headers, rows, and alignment options.</Description>
 		<PackageProjectUrl>https://github.com/BrunoVT1992/ConsoleTable</PackageProjectUrl>

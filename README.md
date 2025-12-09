@@ -4,11 +4,11 @@ A lightweight .NET library for creating beautifully formatted console tables wit
 
 ## Features
 
-- Create formatted tables as a string with headers and data rows
+- Create formatted tables as a string with styled headers, footers and data rows
 - Unicode box-drawing characters for clean borders
 - Automatic column width calculation
 - Configurable cell padding
-- Text alignment options (left/right) for headers and rows
+- Text alignment options (left/right) for headers, footers and rows
 - Easy clearing and reusing of tables
 - Simple and intuitive API
 - Optimized for performance
@@ -31,7 +31,7 @@ dotnet add package ConsoleTable.Text
 
 ### PackageReference
 ```xml
-<PackageReference Include="ConsoleTable.Text" Version="1.0.0" />
+<PackageReference Include="ConsoleTable.Text" Version="2.0.0" />
 ```
 
 ### nuget.org
@@ -346,7 +346,13 @@ Output:
   Total: 3   Total Age: 102
 ```
 
+## Feature Requests & Bug Reports
+If you want to log a bug or request a new feature, please do so by creating an issue on GitHub: [https://github.com/BrunoVT1992/ConsoleTable/issues](https://github.com/BrunoVT1992/ConsoleTable/issues)
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Find me on
+- GitHub: [https://github.com/BrunoVT1992](https://github.com/BrunoVT1992)
+- [https://brunovt.be/](https://brunovt.be/)
