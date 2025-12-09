@@ -343,10 +343,6 @@ namespace ConsoleTable.Text
             }
 
             var maximumCellWidths = new int[maximumColumns];
-            for (int i = 0; i < maximumCellWidths.Length; i++)
-            {
-                maximumCellWidths[i] = 0;
-            }
 
             var paddingCount = 0;
             if (Padding > 0)
