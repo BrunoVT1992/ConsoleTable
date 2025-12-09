@@ -78,7 +78,8 @@ class Program
                 new string[] { "Alice Cooper", "30", "New York" },
                 new string[] { "Bob", "25", "Los Angeles" },
                 new string[] { "Charlie Brown", "47", "Chicago" }
-            }
+            },
+            Footers = new string[] { "Total: 3", "Total Age: 102" }
         };
 
         Console.WriteLine(table.ToTable());

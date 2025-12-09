@@ -282,6 +282,27 @@ Output:
   Total: 3        Total Age: 102
 ```
 
+## Using only public properties
+If you want just a fast and easy setup using only properties.
+
+```csharp
+using ConsoleTable.Text;
+
+var table = new Table
+{
+    Headers = new string[] { "Name", "Age", "City" },
+    Rows = new List<string[]>
+    {
+        new string[] { "Alice Cooper", "30", "New York" },
+        new string[] { "Bob", "25", "Los Angeles" },
+        new string[] { "Charlie Brown", "47", "Chicago" }
+    },
+    Footers = new string[] { "Total: 3", "Total Age: 102" }
+};
+
+Console.WriteLine(table.ToTable());
+```
+
 ### Header only
 
 ```csharp
