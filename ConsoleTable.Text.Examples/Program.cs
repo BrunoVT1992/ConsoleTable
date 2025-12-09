@@ -32,7 +32,7 @@ class Program
 
         WriteTableFluent();
 
-        //WriteBigTable();
+        WriteBigTable();
 
         Console.Read();
     }
