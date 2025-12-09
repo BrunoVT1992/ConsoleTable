@@ -5,13 +5,13 @@
 
 		<!-- NuGet Package Metadata -->
 		<PackageId>ConsoleTable.Text</PackageId>
-		<Version>1.0.3</Version>
+		<Version>2.0.0</Version>
 		<Authors>Bruno Van Thournout</Authors>
-		<Description>A library for creating a formatted string tables with customizable headers, rows, and alignment options.</Description>
+		<Description>A library for creating a formatted string table with customizable headers, footers, rows and easy to use styling options.</Description>
 		<PackageProjectUrl>https://github.com/BrunoVT1992/ConsoleTable</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/BrunoVT1992/ConsoleTable</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>console;table;formatting;cli</PackageTags>
+		<PackageTags>console;table;tables;consoletable;consoletables;console-table;texttable;text-table;output;format;formatting;cli;string;text;ct;fluent;grid</PackageTags>
 		<PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
