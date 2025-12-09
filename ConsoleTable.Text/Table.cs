@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -195,6 +194,128 @@ namespace ConsoleTable.Text
             return this;
         }
 
+
+
+        /// <summary>
+        /// Clears the cached generated table string
+        /// </summary>
+        public Table ClearCache()
+        {
+            _tableCache = null;
+            return this;
+        }
+
+        /// <summary>
+        /// Clear all the headers and rows from the table
+        /// </summary>
+        public Table Clear()
+        {
+            SetHeaders(null);
+            ClearRows();
+            SetFooters(null);
+            ClearCache();
+            return this;
+        }
+
+        /// <summary>
+        /// Generates the formatted table to a string
+        /// </summary>
+        public string ToTable()
+        {
+            if (CachingEnabled && !string.IsNullOrEmpty(_tableCache))
+                return _tableCache;
+
+            if (Headers?.Any() != true && Rows?.Any() != true && Footers?.Any() != true)
+                return string.Empty;
+
+            var formattedTable = new StringBuilder();
+
+            int[] maximumCellWidths = GetMaxCellWidths();
+
+            var topLineCreated = false;
+            var previousRow = Array.Empty<string>();
+            var nextRow = Array.Empty<string>();
+
+            if (Headers?.Any() == true)
+            {
+                formattedTable = CreateTopLine(maximumCellWidths, Headers.Count(), formattedTable);
+                topLineCreated = true;
+
+                formattedTable = CreateValueLine(maximumCellWidths, Headers, HeaderTextAlignmentRight, TableDrawing.VerticalLine, formattedTable);
+
+                previousRow = Headers;
+
+                //When there are no rows immediatly draw the bottom line after the header
+                if (Rows?.Any() == true)
+                {
+                    nextRow = Rows.First();
+                    formattedTable = CreateSeperatorLine(maximumCellWidths, previousRow.Count(), nextRow.Count(), TableDrawing.HorizontalHeaderLine, formattedTable);
+                }
+                else
+                {
+                    formattedTable = CreateBottomLine(maximumCellWidths, Headers.Count(), TableDrawing.HorizontalHeaderLine, formattedTable);
+                }
+            }
+
+            if (Rows?.Any() == true)
+            {
+                if (!topLineCreated)
+                {
+                    formattedTable = CreateTopLine(maximumCellWidths, Rows.First().Count(), formattedTable);
+                    topLineCreated = true;
+                }
+
+                int rowIndex = 0;
+                int lastRowIndex = Rows.Count - 1;
+
+                for (int i = 0; i < Rows.Count; i++)
+                {
+                    var row = CleanupRow(Rows[i]);
+
+                    formattedTable = CreateValueLine(maximumCellWidths, row, RowTextAlignmentRight, TableDrawing.VerticalLine, formattedTable);
+
+                    previousRow = row;
+
+                    if (rowIndex != lastRowIndex)
+                    {
+                        nextRow = CleanupRow(Rows[rowIndex + 1]);
+
+                        formattedTable = CreateSeperatorLine(maximumCellWidths, previousRow.Count(), nextRow.Count(), TableDrawing.HorizontalLine, formattedTable);
+                    }
+
+                    rowIndex++;
+                }
+
+                formattedTable = CreateBottomLine(maximumCellWidths, previousRow.Count(), TableDrawing.HorizontalLine, formattedTable);
+            }
+
+            if (Footers?.Any() == true)
+            {
+                formattedTable = CreateValueLine(maximumCellWidths, Footers, FooterTextAlignmentRight, TableDrawing.EmptySpace, formattedTable);
+            }
+
+            var generatedTable = formattedTable.ToString();
+
+            if (CachingEnabled)
+                _tableCache = generatedTable;
+
+            return generatedTable;
+        }
+
+        public override string ToString()
+        {
+            return ToTable();
+        }
+
+        private static string[] CleanupRow(string[] row)
+        {
+            //Weird behaviour with empty rows.So we create 1 column with a space inside.
+            if (row == null || row.Length <= 0)
+                return new string[] { " " };
+
+            return row;
+        }
+
         private int[] GetMaxCellWidths()
         {
             var table = new List<string[]>();
@@ -217,13 +338,15 @@ namespace ConsoleTable.Text
             var maximumColumns = 0;
             foreach (var row in table)
             {
-                if (row.Length > maximumColumns)
+                if (row != null && row.Length > maximumColumns)
                     maximumColumns = row.Length;
             }
 
             var maximumCellWidths = new int[maximumColumns];
             for (int i = 0; i < maximumCellWidths.Length; i++)
+            {
                 maximumCellWidths[i] = 0;
+            }
 
             var paddingCount = 0;
             if (Padding > 0)
@@ -234,6 +357,9 @@ namespace ConsoleTable.Text
 
             foreach (var row in table)
             {
+                if (row == null || row.Length <= 0)
+                    continue;
+
                 for (int i = 0; i < row.Length; i++)
                 {
                     var maxWidth = row[i].Length + paddingCount;
@@ -351,127 +477,6 @@ namespace ConsoleTable.Text
             }
 
             return formattedTable;
-        }
-
-        /// <summary>
-        /// Clears the cached generated table string
-        /// </summary>
-        public Table ClearCache()
-        {
-            _tableCache = null;
-            return this;
-        }
-
-        /// <summary>
-        /// Clear all the headers and rows from the table
-        /// </summary>
-        public Table Clear()
-        {
-            SetHeaders(null);
-            ClearRows();
-            SetFooters(null);
-            ClearCache();
-            return this;
-        }
-
-        /// <summary>
-        /// Generates the formatted table to a string
-        /// </summary>
-        public string ToTable()
-        {
-            if (CachingEnabled && !string.IsNullOrEmpty(_tableCache))
-                return _tableCache;
-
-            if (Rows?.Any() == true)
-            {
-                for (int rowIndex = 0; rowIndex < Rows.Count; rowIndex++)
-                {
-                    var row = Rows[rowIndex];
-                    //Weird behaviour with empty rows. So we create 1 column with a space inside.
-                    if ((row == null || row.Length <= 0))
-                        Rows[rowIndex] = new string[] { " " };
-                }
-            }
-
-            if (Headers?.Any() != true && Rows?.Any() != true && Footers?.Any() != true)
-                return string.Empty;
-
-            var formattedTable = new StringBuilder();
-
-            int[] maximumCellWidths = GetMaxCellWidths();
-
-            var topLineCreated = false;
-            var previousRow = Array.Empty<string>();
-            var nextRow = Array.Empty<string>();
-
-            if (Headers?.Any() == true)
-            {
-                formattedTable = CreateTopLine(maximumCellWidths, Headers.Count(), formattedTable);
-                topLineCreated = true;
-
-                formattedTable = CreateValueLine(maximumCellWidths, Headers, HeaderTextAlignmentRight, TableDrawing.VerticalLine, formattedTable);
-
-                previousRow = Headers;
-
-                //When there are no rows immediatly draw the bottom line after the header
-                if (Rows?.Any() == true)
-                {
-                    nextRow = Rows.First();
-                    formattedTable = CreateSeperatorLine(maximumCellWidths, previousRow.Count(), nextRow.Count(), TableDrawing.HorizontalHeaderLine, formattedTable);
-                }
-                else
-                {
-                    formattedTable = CreateBottomLine(maximumCellWidths, Headers.Count(), TableDrawing.HorizontalHeaderLine, formattedTable);
-                }
-            }
-
-            if (Rows?.Any() == true)
-            {
-                if (!topLineCreated)
-                {
-                    formattedTable = CreateTopLine(maximumCellWidths, Rows.First().Count(), formattedTable);
-                    topLineCreated = true;
-                }
-
-                int rowIndex = 0;
-                int lastRowIndex = Rows.Count - 1;
-
-                for (int i = 0; i < Rows.Count; i++)
-                {
-                    var row = Rows[i];
-
-                    formattedTable = CreateValueLine(maximumCellWidths, row, RowTextAlignmentRight, TableDrawing.VerticalLine, formattedTable);
-
-                    previousRow = row;
-
-                    if (rowIndex != lastRowIndex)
-                    {
-                        nextRow = Rows[rowIndex + 1];
-                        formattedTable = CreateSeperatorLine(maximumCellWidths, previousRow.Count(), nextRow.Count(), TableDrawing.HorizontalLine, formattedTable);
-                    }
-
-                    rowIndex++;
-                }
-
-                formattedTable = CreateBottomLine(maximumCellWidths, previousRow.Count(), TableDrawing.HorizontalLine, formattedTable);
-            }
-
-            if (Footers?.Any() == true)
-            {
-                formattedTable = CreateValueLine(maximumCellWidths, Footers, FooterTextAlignmentRight, TableDrawing.EmptySpace, formattedTable);
-            }
-
-            var generatedTable = formattedTable.ToString();
-
-            if (CachingEnabled)
-                _tableCache = generatedTable;
-
-            return generatedTable;
-        }
-
-        public override string ToString()
-        {
-            return ToTable();
         }
     }
 }
