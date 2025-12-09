@@ -4,7 +4,7 @@ A lightweight .NET library for creating beautifully formatted console tables wit
 
 ## Features
 
-- Create formatted tables as a string with styled headers, footers and data rows
+- Create formatted tables as a string with styled headers, footers and rows
 - Unicode box-drawing characters for clean borders
 - Automatic column width calculation
 - Configurable cell padding
@@ -85,7 +85,7 @@ Output:
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `Headers` | `string[]` | `Array.Empty<string>()` | The table headers. Headers are not required. |
-| `Rows` | `List<string[]>` | `new List<string[]>()` | All the data rows for the table. Rows are not required. |
+| `Rows` | `List<string[]>` | `new List<string[]>()` | All the rows for the table. Rows are not required. |
 | `Footers` | `string[]` | `Array.Empty<string>()` | The table footers. Footers are not required. |
 | `Padding` | `int` | `1` | The number of spaces on each side of cell content |
 | `HeaderTextAlignmentRight` | `bool` | `false` | When `true`, header text is right-aligned otherwise left aligned |
@@ -98,11 +98,11 @@ Output:
 | Method | Description |
 |--------|-------------|
 | `SetHeaders(params string[] headers)` | Sets the table headers. Calling this again will overwrite previous headers. Headers are not required. |
-| `AddRow(params string[] row)` | Adds a data row to the table. Rows are not required. |
-| `AddRows(params string[][] rows)` | Adds multiple data rows to the table. Rows are not required. |
-| `ClearRows()` | Removes all data rows from the table (headers are preserved). |
-| `SetFooters(params string[] headers)` | Sets the table footers. Calling this again will overwrite previous footers. Footers are not required. |
-| `Clear()` | Clear all the headers and rows from the table. |
+| `AddRow(params string[] row)` | Adds a row to the table. Rows are not required. |
+| `AddRows(params string[][] rows)` | Adds multiple rows to the table. Rows are not required. |
+| `ClearRows()` | Removes all rows from the table (headers are preserved). |
+| `SetFooters(params string[] footers)` | Sets the table footers. Calling this again will overwrite previous footers. Footers are not required. |
+| `Clear()` | Clear all the headers, footers and rows from the table. |
 | `ClearCache()` | Clears the generated table string cache. This can be done to save memory. |
 | `ToTable() / ToString()` | Returns the formatted table as a string. |
 

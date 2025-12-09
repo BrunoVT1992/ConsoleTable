@@ -309,7 +309,7 @@ namespace ConsoleTable.Text
 
         private static string[] CleanupRow(string[] row)
         {
-            //Weird behaviour with empty rows.So we create 1 column with a space inside.
+            //Weird behaviour with empty rows. So we create 1 column with a space inside.
             if (row == null || row.Length <= 0)
                 return new string[] { " " };
 
