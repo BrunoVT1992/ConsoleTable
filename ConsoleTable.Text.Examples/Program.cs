@@ -4,6 +4,12 @@ class Program
 {
     static void Main(string[] args)
     {
+        Console.ForegroundColor = ConsoleColor.Black;
+        Console.BackgroundColor = ConsoleColor.White;
+        Console.Clear();
+        Console.WriteLine();
+        Console.WriteLine();
+
         WriteDefaultTable();
 
         WriteDefaultTableWithProperties();
@@ -32,8 +38,10 @@ class Program
 
         WriteTableFluent();
 
-        WriteBigTable();
+        //WriteBigTable();
 
+        Console.WriteLine();
+        Console.WriteLine();
         Console.Read();
     }
 
