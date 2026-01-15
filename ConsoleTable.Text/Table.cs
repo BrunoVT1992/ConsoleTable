@@ -100,10 +100,10 @@ namespace ConsoleTable.Text
             }
         }
 
+        private bool _rowTextAlignmentRight;
         /// <summary>
         /// Gets or sets a value indicating whether the row text is aligned to the right or left
         /// </summary>
-        private bool _rowTextAlignmentRight;
         public bool RowTextAlignmentRight
         {
             get => _rowTextAlignmentRight;
@@ -114,16 +114,30 @@ namespace ConsoleTable.Text
             }
         }
 
+        private bool _footerTextAlignmentRight;
         /// <summary>
         /// Gets or sets a value indicating whether the footer text is aligned to the right or left
         /// </summary>
-        private bool _footerTextAlignmentRight;
         public bool FooterTextAlignmentRight
         {
             get => _footerTextAlignmentRight;
             set
             {
                 _footerTextAlignmentRight = value;
+                ClearCache();
+            }
+        }
+
+        private bool _showBorders = true;
+        /// <summary>
+        /// Gets or sets a value indicating whether the table borders are visible. Default is true.
+        /// </summary>
+        public bool ShowBorders
+        {
+            get => _showBorders;
+            set
+            {
+                _showBorders = value;
                 ClearCache();
             }
         }
@@ -194,8 +208,6 @@ namespace ConsoleTable.Text
             return this;
         }
 
-
-
         /// <summary>
         /// Clears the cached generated table string
         /// </summary>
@@ -238,10 +250,13 @@ namespace ConsoleTable.Text
 
             if (Headers?.Any() == true)
             {
-                formattedTable = CreateTopLine(maximumCellWidths, Headers.Count(), formattedTable);
-                topLineCreated = true;
+                if (ShowBorders)
+                {
+                    formattedTable = CreateTopLine(maximumCellWidths, Headers.Count(), formattedTable);
+                    topLineCreated = true;
+                }
 
-                formattedTable = CreateValueLine(maximumCellWidths, Headers, HeaderTextAlignmentRight, TableDrawing.VerticalLine, formattedTable);
+                formattedTable = CreateValueLine(maximumCellWidths, Headers, HeaderTextAlignmentRight, ShowBorders ? TableDrawing.VerticalLine : TableDrawing.EmptySpace, formattedTable);
 
                 previousRow = Headers;
 
@@ -249,17 +264,23 @@ namespace ConsoleTable.Text
                 if (Rows?.Any() == true)
                 {
                     nextRow = Rows.First();
-                    formattedTable = CreateSeperatorLine(maximumCellWidths, previousRow.Count(), nextRow.Count(), TableDrawing.HorizontalHeaderLine, formattedTable);
+                    if (ShowBorders)
+                    {
+                        formattedTable = CreateSeperatorLine(maximumCellWidths, previousRow.Count(), nextRow.Count(), TableDrawing.HorizontalHeaderLine, formattedTable);
+                    }
                 }
                 else
                 {
-                    formattedTable = CreateBottomLine(maximumCellWidths, Headers.Count(), TableDrawing.HorizontalHeaderLine, formattedTable);
+                    if (ShowBorders)
+                    {
+                        formattedTable = CreateBottomLine(maximumCellWidths, Headers.Count(), TableDrawing.HorizontalHeaderLine, formattedTable);
+                    }
                 }
             }
 
             if (Rows?.Any() == true)
             {
-                if (!topLineCreated)
+                if (!topLineCreated && ShowBorders)
                 {
                     formattedTable = CreateTopLine(maximumCellWidths, Rows.First().Count(), formattedTable);
                     topLineCreated = true;
@@ -272,7 +293,7 @@ namespace ConsoleTable.Text
                 {
                     var row = CleanupRow(Rows[i]);
 
-                    formattedTable = CreateValueLine(maximumCellWidths, row, RowTextAlignmentRight, TableDrawing.VerticalLine, formattedTable);
+                    formattedTable = CreateValueLine(maximumCellWidths, row, RowTextAlignmentRight, ShowBorders ? TableDrawing.VerticalLine : TableDrawing.EmptySpace, formattedTable);
 
                     previousRow = row;
 
@@ -280,13 +301,19 @@ namespace ConsoleTable.Text
                     {
                         nextRow = CleanupRow(Rows[rowIndex + 1]);
 
-                        formattedTable = CreateSeperatorLine(maximumCellWidths, previousRow.Count(), nextRow.Count(), TableDrawing.HorizontalLine, formattedTable);
+                        if (ShowBorders)
+                        {
+                            formattedTable = CreateSeperatorLine(maximumCellWidths, previousRow.Count(), nextRow.Count(), TableDrawing.HorizontalLine, formattedTable);
+                        }
                     }
 
                     rowIndex++;
                 }
 
-                formattedTable = CreateBottomLine(maximumCellWidths, previousRow.Count(), TableDrawing.HorizontalLine, formattedTable);
+                if (ShowBorders)
+                {
+                    formattedTable = CreateBottomLine(maximumCellWidths, previousRow.Count(), TableDrawing.HorizontalLine, formattedTable);
+                }
             }
 
             if (Footers?.Any() == true)
@@ -411,8 +438,16 @@ namespace ConsoleTable.Text
             if (Padding > 0)
                 paddingString = string.Concat(Enumerable.Repeat(' ', Padding));
 
-            foreach (var column in row)
+            for (int i = 0; i < row.Length; i++)
             {
+                var column = row[i];
+
+                var leftVerticalLine = verticalLine;
+                if (i == 0 && !ShowBorders)
+                {
+                    leftVerticalLine = TableDrawing.Empty;
+                }
+
                 var restWidth = maximumCellWidths[cellIndex];
                 if (Padding > 0)
                     restWidth -= Padding * 2;
@@ -420,13 +455,13 @@ namespace ConsoleTable.Text
                 var cellValue = alignRight ? column.PadLeft(restWidth, ' ') : column.PadRight(restWidth, ' ');
 
                 if (cellIndex == 0 && cellIndex == lastCellIndex)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", verticalLine, paddingString, cellValue, paddingString, verticalLine));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", leftVerticalLine, paddingString, cellValue, paddingString, verticalLine));
                 else if (cellIndex == 0)
-                    formattedTable.Append(string.Format("{0}{1}{2}{3}", verticalLine, paddingString, cellValue, paddingString));
+                    formattedTable.Append(string.Format("{0}{1}{2}{3}", leftVerticalLine, paddingString, cellValue, paddingString));
                 else if (cellIndex == lastCellIndex)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", verticalLine, paddingString, cellValue, paddingString, verticalLine));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", leftVerticalLine, paddingString, cellValue, paddingString, verticalLine));
                 else
-                    formattedTable.Append(string.Format("{0}{1}{2}{3}", verticalLine, paddingString, cellValue, paddingString));
+                    formattedTable.Append(string.Format("{0}{1}{2}{3}", leftVerticalLine, paddingString, cellValue, paddingString));
 
                 cellIndex++;
             }

@@ -537,6 +537,47 @@ public class TableTests
         Assert.Contains("F", resultRight);
         Assert.NotEqual(resultLeft, resultRight);
     }
+
+    [Fact]
+    public void ShowBorders_DefaultValue_IsTrue()
+    {
+        var table = new Table();
+
+        Assert.True(table.ShowBorders);
+    }
+
+    [Fact]
+    public void ShowBorders_False_RemovesBorderCharacters()
+    {
+        var table = new Table { ShowBorders = false };
+        table.SetHeaders("Name", "Age");
+        table.AddRow("John", "30");
+        table.AddRow("Jane", "25");
+        table.SetFooters("Footer1", "Footer2");
+
+        var result = table.ToTable();
+
+        // Should NOT contain border characters
+        Assert.DoesNotContain("│", result);  // Vertical line
+        Assert.DoesNotContain("─", result);  // Horizontal line
+        Assert.DoesNotContain("├", result);  // Left joint
+        Assert.DoesNotContain("┤", result);  // Right joint
+        Assert.DoesNotContain("┌", result);  // Top left corner
+        Assert.DoesNotContain("┐", result);  // Top right corner
+        Assert.DoesNotContain("└", result);  // Bottom left corner
+        Assert.DoesNotContain("┘", result);  // Bottom right corner
+        Assert.DoesNotContain("┼", result);  // Middle joint
+
+        // Should still contain the actual content
+        Assert.Contains("Name", result);
+        Assert.Contains("Age", result);
+        Assert.Contains("John", result);
+        Assert.Contains("30", result);
+        Assert.Contains("Jane", result);
+        Assert.Contains("25", result);
+        Assert.Contains("Footer1", result);
+        Assert.Contains("Footer2", result);
+    }
     #endregion
 
     #region Cache

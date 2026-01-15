@@ -4,6 +4,12 @@ class Program
 {
     static void Main(string[] args)
     {
+        Console.ForegroundColor = ConsoleColor.Black;
+        Console.BackgroundColor = ConsoleColor.White;
+        Console.Clear();
+        Console.WriteLine();
+        Console.WriteLine();
+
         WriteDefaultTable();
 
         WriteDefaultTableWithProperties();
@@ -32,8 +38,12 @@ class Program
 
         WriteTableFluent();
 
-        WriteBigTable();
+        WriteTableWithoutBorders();
 
+        //WriteBigTable();
+
+        Console.WriteLine();
+        Console.WriteLine();
         Console.Read();
     }
 
@@ -78,7 +88,8 @@ class Program
                 new string[] { "Alice Cooper", "30", "New York" },
                 new string[] { "Bob", "25", "Los Angeles" },
                 new string[] { "Charlie Brown", "47", "Chicago" }
-            }
+            },
+            Footers = new string[] { "Total: 3", "Total Age: 102" }
         };
 
         Console.WriteLine(table.ToTable());
@@ -242,6 +253,36 @@ class Program
             .ToTable();
 
         Console.WriteLine(tableString);
+        Console.WriteLine();
+    }
+
+    private static void WriteTableWithoutBorders()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Table without borders:");
+
+        // Setup the table
+        var table = new Table
+        {
+            ShowBorders = false
+        };
+
+        // Set headers
+        table.SetHeaders("Name", "Age", "City");
+
+        // Add rows
+        table.AddRow("Alice Cooper", "30", "New York");
+        table.AddRows(new string[][]
+        {
+            new string[] { "Bob", "25", "Los Angeles" },
+            new string[] { "Charlie Brown", "47", "Chicago" }
+        });
+
+        // Set footers
+        table.SetFooters("Total: 3", "Total Age: 102");
+
+        // Display the table
+        Console.WriteLine(table.ToTable());
         Console.WriteLine();
     }
 

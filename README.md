@@ -5,14 +5,14 @@ A lightweight .NET library for creating beautifully formatted console tables wit
 ## Features
 
 - Create formatted tables as a string with styled headers, footers and rows
-- Unicode box-drawing characters for clean borders
+- Unicode box-drawing characters for clean borders (borders are optional and can be disabled if you want a minimalist style)
 - Automatic column width calculation
 - Configurable cell padding
 - Text alignment options (left/right) for headers, footers and rows
 - Easy clearing and reusing of tables
 - Simple and intuitive API
 - Optimized for performance
-- Support for varying column counts across rows (each row can have its own number of cells).
+- Support for varying column counts across rows (each row can have its own number of cells)
 
 ## Releases
 Check releases for the changelog here [https://github.com/BrunoVT1992/ConsoleTable/releases/](https://github.com/BrunoVT1992/ConsoleTable/releases/)
@@ -92,6 +92,7 @@ Output:
 | `RowTextAlignmentRight` | `bool` | `false` | When `true`, row text is right-aligned otherwise left aligned |
 | `FooterTextAlignmentRight` | `bool` | `false` | When `true`, footer text is right-aligned otherwise left aligned |
 | `CachingEnabled` | `bool` | `true` | When `true`, the generated table string is cached when the ToTable method is called. Cache will be cleared on any property change or method call. |
+| `ShowBorders` | `bool` | `true` | When `false`, the table is drawn without borders for a more minimalist style |
 
 ### Methods
 
@@ -154,7 +155,12 @@ Output:
 using ConsoleTable.Text;
 
 // Setup the table
-var table = new Table { HeaderTextAlignmentRight = true, RowTextAlignmentRight = true, FooterTextAlignmentRight = true };
+var table = new Table
+{
+    HeaderTextAlignmentRight = true,
+    RowTextAlignmentRight = true,
+    FooterTextAlignmentRight = true
+};
 
 // Set headers
 table.SetHeaders("Name", "Age", "City");
@@ -249,13 +255,51 @@ Output:
   Footer 1   Footer 2
 ```
 
+### Table without borders
+
+```csharp
+using ConsoleTable.Text;
+
+// Setup the table
+var table = new Table
+{
+    ShowBorders = false
+};
+
+// Set headers
+table.SetHeaders("Name", "Age", "City");
+
+// Add rows
+table.AddRow("Alice Cooper", "30", "New York");
+table.AddRows(new string[][]
+{
+    new string[] { "Bob", "25", "Los Angeles" },
+    new string[] { "Charlie Brown", "47", "Chicago" }
+});
+
+// Set footers
+table.SetFooters("Total: 3", "Total Age: 102");
+
+// Display the table
+Console.WriteLine(table.ToTable());
+```
+
+Output:
+```
+ Name            Age              City
+ Alice Cooper    30               New York
+ Bob             25               Los Angeles
+ Charlie Brown   47               Chicago
+ Total: 3        Total Age: 102
+```
+
 
 ### Write a Table Fluent
 
 ```csharp
 using ConsoleTable.Text;
 
-  var tableString = new Table()
+var tableString = new Table()
     .SetHeaders("Name", "Age", "City")
     .AddRow("Alice Cooper", "30", "New York")
     .AddRows(
@@ -282,6 +326,27 @@ Output:
   Total: 3        Total Age: 102
 ```
 
+## Using only public properties
+If you want just a fast and easy setup using only properties.
+
+```csharp
+using ConsoleTable.Text;
+
+var table = new Table
+{
+    Headers = new string[] { "Name", "Age", "City" },
+    Rows = new List<string[]>
+    {
+        new string[] { "Alice Cooper", "30", "New York" },
+        new string[] { "Bob", "25", "Los Angeles" },
+        new string[] { "Charlie Brown", "47", "Chicago" }
+    },
+    Footers = new string[] { "Total: 3", "Total Age: 102" }
+};
+
+Console.WriteLine(table.ToTable());
+```
+
 ### Header only
 
 ```csharp
@@ -305,7 +370,7 @@ Output:
 ```csharp
 using ConsoleTable.Text;
 
- var table = new Table();
+var table = new Table();
 
 for (int i = 1; i <= 5; i++) 
 {

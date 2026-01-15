@@ -15,5 +15,6 @@
         public const char HorizontalHeaderLine = '═';
         public const string VerticalLine = "│";
         public const string EmptySpace = " ";
+        public const string Empty = "";
     }
 }
