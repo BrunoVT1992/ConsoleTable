@@ -442,10 +442,10 @@ namespace ConsoleTable.Text
             {
                 var column = row[i];
 
-                var leftVerticlaLine = verticalLine;
+                var leftVerticalLine = verticalLine;
                 if (i == 0 && !ShowBorders)
                 {
-                    leftVerticlaLine = TableDrawing.Empty;
+                    leftVerticalLine = TableDrawing.Empty;
                 }
 
                 var restWidth = maximumCellWidths[cellIndex];
@@ -455,13 +455,13 @@ namespace ConsoleTable.Text
                 var cellValue = alignRight ? column.PadLeft(restWidth, ' ') : column.PadRight(restWidth, ' ');
 
                 if (cellIndex == 0 && cellIndex == lastCellIndex)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", leftVerticlaLine, paddingString, cellValue, paddingString, verticalLine));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", leftVerticalLine, paddingString, cellValue, paddingString, verticalLine));
                 else if (cellIndex == 0)
-                    formattedTable.Append(string.Format("{0}{1}{2}{3}", leftVerticlaLine, paddingString, cellValue, paddingString));
+                    formattedTable.Append(string.Format("{0}{1}{2}{3}", leftVerticalLine, paddingString, cellValue, paddingString));
                 else if (cellIndex == lastCellIndex)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", leftVerticlaLine, paddingString, cellValue, paddingString, verticalLine));
+                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", leftVerticalLine, paddingString, cellValue, paddingString, verticalLine));
                 else
-                    formattedTable.Append(string.Format("{0}{1}{2}{3}", leftVerticlaLine, paddingString, cellValue, paddingString));
+                    formattedTable.Append(string.Format("{0}{1}{2}{3}", leftVerticalLine, paddingString, cellValue, paddingString));
 
                 cellIndex++;
             }
