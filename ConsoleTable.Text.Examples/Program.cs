@@ -38,6 +38,8 @@ class Program
 
         WriteTableFluent();
 
+        WriteTableWithoutBorders();
+
         //WriteBigTable();
 
         Console.WriteLine();
@@ -251,6 +253,36 @@ class Program
             .ToTable();
 
         Console.WriteLine(tableString);
+        Console.WriteLine();
+    }
+
+    private static void WriteTableWithoutBorders()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Table without borders:");
+
+        // Setup the table
+        var table = new Table
+        {
+            ShowBorders = false
+        };
+
+        // Set headers
+        table.SetHeaders("Name", "Age", "City");
+
+        // Add rows
+        table.AddRow("Alice Cooper", "30", "New York");
+        table.AddRows(new string[][]
+        {
+            new string[] { "Bob", "25", "Los Angeles" },
+            new string[] { "Charlie Brown", "47", "Chicago" }
+        });
+
+        // Set footers
+        table.SetFooters("Total: 3", "Total Age: 102");
+
+        // Display the table
+        Console.WriteLine(table.ToTable());
         Console.WriteLine();
     }
 
