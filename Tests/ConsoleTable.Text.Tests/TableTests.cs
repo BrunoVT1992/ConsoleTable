@@ -569,8 +569,14 @@ public class TableTests
         Assert.DoesNotContain("┼", result);  // Middle joint
 
         // Should still contain the actual content
-        Assert.Contains("Header", result);
-        Assert.Contains("Value", result);
+        Assert.Contains("Name", result);
+        Assert.Contains("Age", result);
+        Assert.Contains("John", result);
+        Assert.Contains("30", result);
+        Assert.Contains("Jane", result);
+        Assert.Contains("25", result);
+        Assert.Contains("Footer1", result);
+        Assert.Contains("Footer2", result);
     }
     #endregion
 
