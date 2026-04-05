@@ -333,7 +333,10 @@ class Program
         var headers = new List<string>();
         for (var columnPos = 1; columnPos <= columnCount; columnPos++)
         {
-            headers.Add($"Header {columnPos}");
+            if (columnPos % 2 == 0)
+                headers.Add($"Header {columnPos}");
+            else
+                headers.Add($"MultiLine{Environment.NewLine}Header {columnPos}");
         }
         table.Headers = headers.ToArray();
 
@@ -343,7 +346,10 @@ class Program
             var row = new string[columnCount];
             for (var columnPos = 1; columnPos <= columnCount; columnPos++)
             {
-                row[columnPos - 1] = $"Row {rowPos} -> Column {columnPos}";
+                if (columnPos % 2 == 0)
+                    row[columnPos - 1] = $"Row {rowPos} -> Column {columnPos}";
+                else
+                    row[columnPos - 1] = $"Row {rowPos}{Environment.NewLine}Column {columnPos}";
             }
             rows.Add(row);
         }
@@ -352,7 +358,10 @@ class Program
         var footers = new List<string>();
         for (var columnPos = 1; columnPos <= columnCount; columnPos++)
         {
-            footers.Add($"Footer {columnPos}");
+            if (columnPos % 2 == 0)
+                footers.Add($"Footer {columnPos}");
+            else
+                footers.Add($"Footer{Environment.NewLine}{columnPos}");
         }
         table.Footers = footers.ToArray();
 
