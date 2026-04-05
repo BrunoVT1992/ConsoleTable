@@ -10,37 +10,37 @@ class Program
         Console.WriteLine();
         Console.WriteLine();
 
-        //WriteDefaultTable();
+        WriteDefaultTable();
 
-        //WriteDefaultTableWithProperties();
+        WriteDefaultTableWithProperties();
 
-        //WriteTableWithStyling(true, true, true, 10);
+        WriteTableWithStyling(true, true, true, 10);
 
-        //WriteTableWithStyling(false, true, true, 10);
+        WriteTableWithStyling(false, true, true, 10);
 
-        //WriteTableWithStyling(true, false, true, 10);
+        WriteTableWithStyling(true, false, true, 10);
 
-        //WriteTableWithStyling(true, true, false, 10);
+        WriteTableWithStyling(true, true, false, 10);
 
-        //WriteTableWithStyling(false, false, false, 10);
+        WriteTableWithStyling(false, false, false, 10);
 
-        //WriteTableOnlyHeaders();
+        WriteTableOnlyHeaders();
 
-        //WriteTableOnlyRows();
+        WriteTableOnlyRows();
 
-        //WriteTableOnlyFooters();
+        WriteTableOnlyFooters();
 
-        //WriteTableMoreHeaders();
+        WriteTableMoreHeaders();
 
-        //WriteTableLessHeaders();
+        WriteTableLessHeaders();
 
-        //WriteTableEachRowRandom();
+        WriteTableEachRowRandom();
 
-        //WriteTableFluent();
+        WriteTableFluent();
 
         WriteMultiLineTable();
 
-        //WriteTableWithoutBorders();
+        WriteTableWithoutBorders();
 
         //WriteBigTable();
 
@@ -79,24 +79,24 @@ class Program
     private static void WriteMultiLineTable()
     {
         Console.WriteLine();
-        Console.WriteLine("Default table:");
+        Console.WriteLine("Multi line table:");
 
         // Setup the table
         var table = new Table
         {
-            RowTextAlignmentRight = true,
-            HeaderTextAlignmentRight = true,
-            FooterTextAlignmentRight = true,
-            Padding = 5,
-            Headers = new string[] { "Name", $"Age{Environment.NewLine}(in years)", "City" },
+            RowTextAlignmentRight = false,
+            HeaderTextAlignmentRight = false,
+            FooterTextAlignmentRight = false,
+            Padding = 2,
+            Headers = new string[] { "Name", $"Age{Environment.NewLine}&{Environment.NewLine}Birthyear", "City" },
             Rows = new List<string[]>
             {
-                new string[] { "Alice Cooper", "30", "New York" },
-                new string[] { "Bob", "25", "Los Angeles" },
-                new string[] { "Charlie Brown", "47", "Chicago" },
-                new string[] { "Gloria", "40", $"Chicago{Environment.NewLine}Originally fron Colombia" }
+                new string[] { "Alice Cooper", $"30{Environment.NewLine}1992", "New York" },
+                new string[] { "Bob", $"25{Environment.NewLine}1992", "Los Angeles" },
+                new string[] { "Charlie Brown", $"67{Environment.NewLine}1992", "Chicago" },
+                new string[] { "Gloria", $"40{Environment.NewLine}1992", $"Chicago{Environment.NewLine}Originally fron Bogota, Colombia" }
             },
-            Footers = new string[] { $"Total: 3{Environment.NewLine}2 Male - 1 Female", "Total Age: 102" }
+            Footers = new string[] { $"Total: 3{Environment.NewLine}3 Male - 1 Female", "Total Age: 102" }
         };
 
         // Display the table
@@ -217,12 +217,12 @@ class Program
         table.AddRow("Bob", "25", "Antwerp", "Belgium");
         table.AddRow("Charlie", "47", "Chicago");
         table.AddRow("Karina", "33", "Lima", "Peru", "South-America");
-        table.AddRow("Jenny", "43");
+        table.AddRow("Jenny", $"43{Environment.NewLine}1973");
         table.AddRow("John");
         table.AddRow("Johny");
         table.AddRow();
         table.AddRow(null!);
-        table.AddRow("Thomas", "33", "Brussels", "Belgium", "Europe", "Earth", "Solar System");
+        table.AddRow("Thomas", "33", "Brussels", $"Belgium{Environment.NewLine}BE", "Europe", "Earth", "Solar System");
         table.AddRow("Nathalie", "29", "Paris", "France", "Europe", "Earth", "Solar System");
         table.AddRow("Mathias", "37", "Oslo", "Norway", "Europe", "Earth", "Solar System");
         table.AddRow("Kenny", "55", "Tokyo");
