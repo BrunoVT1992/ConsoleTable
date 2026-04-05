@@ -18,6 +18,16 @@ public class TableTests
     }
 
     [Fact]
+    public void Empty()
+    {
+        var table = new Table();
+
+        var result = table.ToTable();
+
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
     public void SetHeaders_OverwritesPreviousHeaders()
     {
         var table = new Table();
