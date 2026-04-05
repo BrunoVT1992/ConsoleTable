@@ -10,6 +10,7 @@
 	<File Path="ChangeLogs/1.0.3-ChangeLog.md" />
 	<File Path="ChangeLogs/2.0.0-ChangeLog.md" />
 	<File Path="ChangeLogs/2.1.0-ChangeLog.md" />
+	<File Path="ChangeLogs/2.2.0-ChangeLog.md" />
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="Tests/ConsoleTable.Text.Tests/ConsoleTable.Text.Tests.csproj" />

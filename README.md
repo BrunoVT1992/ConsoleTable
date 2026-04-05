@@ -13,6 +13,7 @@ A lightweight .NET library for creating beautifully formatted console tables wit
 - Simple and intuitive API
 - Optimized for performance
 - Support for varying column counts across rows (each row can have its own number of cells)
+- Multi line support (cell content can contain newlines and the table will adjust row height accordingly) in headers, rows and footers
 
 ## Releases
 Check releases for the changelog here [https://github.com/BrunoVT1992/ConsoleTable/releases/](https://github.com/BrunoVT1992/ConsoleTable/releases/)
