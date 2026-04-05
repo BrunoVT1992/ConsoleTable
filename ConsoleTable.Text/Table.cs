@@ -343,6 +343,14 @@ namespace ConsoleTable.Text
             return row;
         }
 
+        private static string[] GetCellLines(string cellValue)
+        {
+            if (string.IsNullOrEmpty(cellValue))
+                return new string[] { string.Empty };
+
+            return cellValue.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+        }
+
         private int[] GetMaxCellWidths()
         {
             var table = new List<string[]>();
@@ -385,7 +393,15 @@ namespace ConsoleTable.Text
 
                 for (int i = 0; i < row.Length; i++)
                 {
-                    var maxWidth = row[i].Length + paddingCount;
+                    var lines = GetCellLines(row[i]);
+                    var maxLineWidth = 0;
+                    for (int l = 0; l < lines.Length; l++)
+                    {
+                        if (lines[l].Length > maxLineWidth)
+                            maxLineWidth = lines[l].Length;
+                    }
+
+                    var maxWidth = maxLineWidth + paddingCount;
 
                     if (maxWidth > maximumCellWidths[i])
                         maximumCellWidths[i] = maxWidth;
@@ -431,39 +447,48 @@ namespace ConsoleTable.Text
 
         private StringBuilder CreateValueLine(int[] maximumCellWidths, string[] row, bool alignRight, string verticalLine, StringBuilder formattedTable)
         {
-            int cellIndex = 0;
+            var cellLines = new string[row.Length][];
+            int maxLineCount = 1;
+            for (int i = 0; i < row.Length; i++)
+            {
+                cellLines[i] = GetCellLines(row[i]);
+                if (cellLines[i].Length > maxLineCount)
+                    maxLineCount = cellLines[i].Length;
+            }
+
             int lastCellIndex = row.Length - 1;
 
             var paddingString = string.Empty;
             if (Padding > 0)
                 paddingString = string.Concat(Enumerable.Repeat(' ', Padding));
 
-            for (int i = 0; i < row.Length; i++)
+            for (int lineIndex = 0; lineIndex < maxLineCount; lineIndex++)
             {
-                var column = row[i];
-
-                var leftVerticalLine = verticalLine;
-                if (i == 0 && !ShowBorders)
+                for (int i = 0; i < row.Length; i++)
                 {
-                    leftVerticalLine = TableDrawing.Empty;
+                    var column = lineIndex < cellLines[i].Length ? cellLines[i][lineIndex] : string.Empty;
+
+                    var leftVerticalLine = verticalLine;
+                    if (i == 0 && !ShowBorders)
+                    {
+                        leftVerticalLine = TableDrawing.Empty;
+                    }
+
+                    var restWidth = maximumCellWidths[i];
+                    if (Padding > 0)
+                        restWidth -= Padding * 2;
+
+                    var cellValue = alignRight ? column.PadLeft(restWidth, ' ') : column.PadRight(restWidth, ' ');
+
+                    if (i == 0 && i == lastCellIndex)
+                        formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", leftVerticalLine, paddingString, cellValue, paddingString, verticalLine));
+                    else if (i == 0)
+                        formattedTable.Append(string.Format("{0}{1}{2}{3}", leftVerticalLine, paddingString, cellValue, paddingString));
+                    else if (i == lastCellIndex)
+                        formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", leftVerticalLine, paddingString, cellValue, paddingString, verticalLine));
+                    else
+                        formattedTable.Append(string.Format("{0}{1}{2}{3}", leftVerticalLine, paddingString, cellValue, paddingString));
                 }
-
-                var restWidth = maximumCellWidths[cellIndex];
-                if (Padding > 0)
-                    restWidth -= Padding * 2;
-
-                var cellValue = alignRight ? column.PadLeft(restWidth, ' ') : column.PadRight(restWidth, ' ');
-
-                if (cellIndex == 0 && cellIndex == lastCellIndex)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", leftVerticalLine, paddingString, cellValue, paddingString, verticalLine));
-                else if (cellIndex == 0)
-                    formattedTable.Append(string.Format("{0}{1}{2}{3}", leftVerticalLine, paddingString, cellValue, paddingString));
-                else if (cellIndex == lastCellIndex)
-                    formattedTable.AppendLine(string.Format("{0}{1}{2}{3}{4}", leftVerticalLine, paddingString, cellValue, paddingString, verticalLine));
-                else
-                    formattedTable.Append(string.Format("{0}{1}{2}{3}", leftVerticalLine, paddingString, cellValue, paddingString));
-
-                cellIndex++;
             }
 
             return formattedTable;

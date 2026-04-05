@@ -10,35 +10,37 @@ class Program
         Console.WriteLine();
         Console.WriteLine();
 
-        WriteDefaultTable();
+        //WriteDefaultTable();
 
-        WriteDefaultTableWithProperties();
+        //WriteDefaultTableWithProperties();
 
-        WriteTableWithStyling(true, true, true, 10);
+        //WriteTableWithStyling(true, true, true, 10);
 
-        WriteTableWithStyling(false, true, true, 10);
+        //WriteTableWithStyling(false, true, true, 10);
 
-        WriteTableWithStyling(true, false, true, 10);
+        //WriteTableWithStyling(true, false, true, 10);
 
-        WriteTableWithStyling(true, true, false, 10);
+        //WriteTableWithStyling(true, true, false, 10);
 
-        WriteTableWithStyling(false, false, false, 10);
+        //WriteTableWithStyling(false, false, false, 10);
 
-        WriteTableOnlyHeaders();
+        //WriteTableOnlyHeaders();
 
-        WriteTableOnlyRows();
+        //WriteTableOnlyRows();
 
-        WriteTableOnlyFooters();
+        //WriteTableOnlyFooters();
 
-        WriteTableMoreHeaders();
+        //WriteTableMoreHeaders();
 
-        WriteTableLessHeaders();
+        //WriteTableLessHeaders();
 
-        WriteTableEachRowRandom();
+        //WriteTableEachRowRandom();
 
-        WriteTableFluent();
+        //WriteTableFluent();
 
-        WriteTableWithoutBorders();
+        WriteMultiLineTable();
+
+        //WriteTableWithoutBorders();
 
         //WriteBigTable();
 
@@ -56,7 +58,7 @@ class Program
         var table = new Table();
 
         // Set headers
-        table.SetHeaders("Name", "Age", "City");
+        table.SetHeaders("Name", $"Age", "City");
 
         // Add rows
         table.AddRow("Alice Cooper", "30", "New York");
@@ -68,6 +70,34 @@ class Program
 
         // Set footers
         table.SetFooters("Total: 3", "Total Age: 102");
+
+        // Display the table
+        Console.WriteLine(table.ToTable());
+        Console.WriteLine();
+    }
+
+    private static void WriteMultiLineTable()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Default table:");
+
+        // Setup the table
+        var table = new Table
+        {
+            RowTextAlignmentRight = true,
+            HeaderTextAlignmentRight = true,
+            FooterTextAlignmentRight = true,
+            Padding = 5,
+            Headers = new string[] { "Name", $"Age{Environment.NewLine}(in years)", "City" },
+            Rows = new List<string[]>
+            {
+                new string[] { "Alice Cooper", "30", "New York" },
+                new string[] { "Bob", "25", "Los Angeles" },
+                new string[] { "Charlie Brown", "47", "Chicago" },
+                new string[] { "Gloria", "40", $"Chicago{Environment.NewLine}Originally fron Colombia" }
+            },
+            Footers = new string[] { $"Total: 3{Environment.NewLine}2 Male - 1 Female", "Total Age: 102" }
+        };
 
         // Display the table
         Console.WriteLine(table.ToTable());
