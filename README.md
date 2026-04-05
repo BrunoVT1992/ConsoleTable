@@ -44,22 +44,22 @@ Download this nuget package from [https://www.nuget.org/packages/ConsoleTable.Te
 using ConsoleTable.Text;
 
 // Setup the table
-var table = new Table();
-
-// Set headers
-table.SetHeaders("Name", "Age", "City");
-
-// Add rows
-table.AddRow("Alice Cooper", "30", "New York");
-
-table.AddRows(new string[][]
+var table = new Table
 {
-    new string[] { "Bob", "25", "Los Angeles" },
-    new string[] { "Charlie Brown", "47", "Chicago" }
-});
-
-//Set footers
-table.SetFooters("Total: 3", "Total Age: 102");
+    RowTextAlignmentRight = false,
+    HeaderTextAlignmentRight = false,
+    FooterTextAlignmentRight = false,
+    Padding = 2,
+    Headers = new string[] { "Name", $"Age{Environment.NewLine}&{Environment.NewLine}Birthyear", "City" },
+    Rows = new List<string[]>
+    {
+        new string[] { "Alice Cooper", $"30{Environment.NewLine}1995", "New York" },
+        new string[] { "Bob", $"25{Environment.NewLine}2000", "Los Angeles" },
+        new string[] { "Charlie Brown", $"67{Environment.NewLine}1958", "Chicago" },
+        new string[] { "Gloria", $"40{Environment.NewLine}1985", $"Chicago{Environment.NewLine}Originally fron Bogota, Colombia" }
+    },
+    Footers = new string[] { $"Total: 4{Environment.NewLine}3 Male - 1 Female", "Total Age: 162" }
+};
 
 // Display the table
 Console.WriteLine(table.ToTable());
@@ -67,16 +67,25 @@ Console.WriteLine(table.ToTable());
 
 Output:
 ```
-┌───────────────┬────────────────┬─────────────┐
-│ Name          │ Age            │ City        │
-├═══════════════┼════════════════┼═════════════┤
-│ Alice Cooper  │ 30             │ New York    │
-├───────────────┼────────────────┼─────────────┤
-│ Bob           │ 25             │ Los Angeles │
-├───────────────┼────────────────┼─────────────┤
-│ Charlie Brown │ 47             │ Chicago     │
-└───────────────┴────────────────┴─────────────┘
-  Total: 3        Total Age: 102
+┌─────────────────────┬──────────────────┬────────────────────────────────────┐
+│  Name               │  Age             │  City                              │
+│                     │  &               │                                    │
+│                     │  Birthyear       │                                    │
+├═════════════════════┼══════════════════┼════════════════════════════════════┤
+│  Alice Cooper       │  30              │  New York                          │
+│                     │  1995            │                                    │
+├─────────────────────┼──────────────────┼────────────────────────────────────┤
+│  Bob                │  25              │  Los Angeles                       │
+│                     │  2000            │                                    │
+├─────────────────────┼──────────────────┼────────────────────────────────────┤
+│  Charlie Brown      │  67              │  Chicago                           │
+│                     │  1958            │                                    │
+├─────────────────────┼──────────────────┼────────────────────────────────────┤
+│  Gloria             │  40              │  Chicago                           │
+│                     │  1985            │  Originally fron Bogota, Colombia  │
+└─────────────────────┴──────────────────┴────────────────────────────────────┘
+   Total: 4              Total Age: 162
+   3 Male - 1 Female
 ```
 
 ## API Reference

@@ -91,12 +91,12 @@ class Program
             Headers = new string[] { "Name", $"Age{Environment.NewLine}&{Environment.NewLine}Birthyear", "City" },
             Rows = new List<string[]>
             {
-                new string[] { "Alice Cooper", $"30{Environment.NewLine}1992", "New York" },
-                new string[] { "Bob", $"25{Environment.NewLine}1992", "Los Angeles" },
-                new string[] { "Charlie Brown", $"67{Environment.NewLine}1992", "Chicago" },
-                new string[] { "Gloria", $"40{Environment.NewLine}1992", $"Chicago{Environment.NewLine}Originally fron Bogota, Colombia" }
+                new string[] { "Alice Cooper", $"30{Environment.NewLine}1995", "New York" },
+                new string[] { "Bob", $"25{Environment.NewLine}2000", "Los Angeles" },
+                new string[] { "Charlie Brown", $"67{Environment.NewLine}1958", "Chicago" },
+                new string[] { "Gloria", $"40{Environment.NewLine}1985", $"Chicago{Environment.NewLine}Originally fron Bogota, Colombia" }
             },
-            Footers = new string[] { $"Total: 3{Environment.NewLine}3 Male - 1 Female", "Total Age: 102" }
+            Footers = new string[] { $"Total: 4{Environment.NewLine}3 Male - 1 Female", "Total Age: 162" }
         };
 
         // Display the table
@@ -217,7 +217,7 @@ class Program
         table.AddRow("Bob", "25", "Antwerp", "Belgium");
         table.AddRow("Charlie", "47", "Chicago");
         table.AddRow("Karina", "33", "Lima", "Peru", "South-America");
-        table.AddRow("Jenny", $"43{Environment.NewLine}1973");
+        table.AddRow("Jenny", $"43{Environment.NewLine}1982");
         table.AddRow("John");
         table.AddRow("Johny");
         table.AddRow();
