@@ -56,7 +56,7 @@ var table = new Table
         new string[] { "Alice Cooper", $"30{Environment.NewLine}1995", "New York" },
         new string[] { "Bob", $"25{Environment.NewLine}2000", "Los Angeles" },
         new string[] { "Charlie Brown", $"67{Environment.NewLine}1958", "Chicago" },
-        new string[] { "Gloria", $"40{Environment.NewLine}1985", $"Chicago{Environment.NewLine}Originally fron Bogota, Colombia" }
+        new string[] { "Gloria", $"40{Environment.NewLine}1985", $"Chicago{Environment.NewLine}Originally from Bogota, Colombia" }
     },
     Footers = new string[] { $"Total: 4{Environment.NewLine}3 Male - 1 Female", "Total Age: 162" }
 };
