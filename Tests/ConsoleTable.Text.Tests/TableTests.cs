@@ -996,7 +996,7 @@ public class TableTests
 
         var result = table.ToTable();
 
-        // Footer uses spaces instead of │, so split on multiple spaces
+        // Verify both footer lines are present in the rendered output.
         Assert.Contains("F", result);
         Assert.Contains("Long", result);
 
