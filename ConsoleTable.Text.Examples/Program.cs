@@ -58,7 +58,7 @@ class Program
         var table = new Table();
 
         // Set headers
-        table.SetHeaders("Name", $"Age", "City");
+        table.SetHeaders("Name", "Age", "City");
 
         // Add rows
         table.AddRow("Alice Cooper", "30", "New York");
