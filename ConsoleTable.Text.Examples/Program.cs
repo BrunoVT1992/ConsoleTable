@@ -10,6 +10,18 @@ class Program
         Console.WriteLine();
         Console.WriteLine();
 
+        var table = new Table
+        {
+            Rows = new List<string[]>
+            {
+                new[] { "" },
+                Array.Empty<string>()
+            }
+        };
+
+        Console.WriteLine("Table with empty row and empty column:");
+        Console.WriteLine(table.ToTable());
+
         WriteDefaultTable();
 
         WriteDefaultTableWithProperties();
