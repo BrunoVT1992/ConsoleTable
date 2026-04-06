@@ -28,6 +28,49 @@ public class TableTests
     }
 
     [Fact]
+    public void OnlyEmptyRows()
+    {
+        var table = new Table
+        {
+            Rows = new List<string[]>
+            {
+                new[] { "" },
+                Array.Empty<string>()
+            }
+        };
+
+        var result = table.ToTable();
+
+        Assert.NotEqual(string.Empty, result);
+    }
+
+    [Fact]
+    public void OnlyEmptyFooters()
+    {
+        var table = new Table
+        {
+            Footers = new string[] { "", "" }
+        };
+
+        var result = table.ToTable();
+
+        Assert.NotEqual(string.Empty, result);
+    }
+
+    [Fact]
+    public void OnlyEmptyHeaders()
+    {
+        var table = new Table
+        {
+            Headers = new string[] { "", "" }
+        };
+
+        var result = table.ToTable();
+
+        Assert.NotEqual(string.Empty, result);
+    }
+
+    [Fact]
     public void SetHeaders_OverwritesPreviousHeaders()
     {
         var table = new Table();
