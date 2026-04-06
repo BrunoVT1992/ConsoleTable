@@ -38,6 +38,10 @@ class Program
 
         WriteTableFluent();
 
+        WriteMultiLineTable(false);
+
+        WriteMultiLineTable(true);
+
         WriteTableWithoutBorders();
 
         //WriteBigTable();
@@ -68,6 +72,35 @@ class Program
 
         // Set footers
         table.SetFooters("Total: 3", "Total Age: 102");
+
+        // Display the table
+        Console.WriteLine(table.ToTable());
+        Console.WriteLine();
+    }
+
+    private static void WriteMultiLineTable(bool textAlignRight)
+    {
+        Console.WriteLine();
+        Console.WriteLine("Multi line table:");
+        Console.WriteLine("Text align " + (textAlignRight ? "right" : "left"));
+
+        // Setup the table
+        var table = new Table
+        {
+            RowTextAlignmentRight = textAlignRight,
+            HeaderTextAlignmentRight = textAlignRight,
+            FooterTextAlignmentRight = textAlignRight,
+            Padding = 2,
+            Headers = new string[] { "Name", $"Age{Environment.NewLine}&{Environment.NewLine}Birthyear", "City" },
+            Rows = new List<string[]>
+            {
+                new string[] { "Alice Cooper", $"30{Environment.NewLine}1995", "New York" },
+                new string[] { "Bob", $"25{Environment.NewLine}2000", "Los Angeles" },
+                new string[] { "Charlie Brown", $"67{Environment.NewLine}1958", "Chicago" },
+                new string[] { "Gloria", $"40{Environment.NewLine}1985", $"Chicago{Environment.NewLine}Originally from Bogota, Colombia" }
+            },
+            Footers = new string[] { $"Total: 4{Environment.NewLine}3 Male - 1 Female", "Total Age: 162" }
+        };
 
         // Display the table
         Console.WriteLine(table.ToTable());
@@ -187,12 +220,12 @@ class Program
         table.AddRow("Bob", "25", "Antwerp", "Belgium");
         table.AddRow("Charlie", "47", "Chicago");
         table.AddRow("Karina", "33", "Lima", "Peru", "South-America");
-        table.AddRow("Jenny", "43");
+        table.AddRow("Jenny", $"43{Environment.NewLine}1982");
         table.AddRow("John");
         table.AddRow("Johny");
         table.AddRow();
         table.AddRow(null!);
-        table.AddRow("Thomas", "33", "Brussels", "Belgium", "Europe", "Earth", "Solar System");
+        table.AddRow("Thomas", "33", "Brussels", $"Belgium{Environment.NewLine}BE", "Europe", "Earth", "Solar System");
         table.AddRow("Nathalie", "29", "Paris", "France", "Europe", "Earth", "Solar System");
         table.AddRow("Mathias", "37", "Oslo", "Norway", "Europe", "Earth", "Solar System");
         table.AddRow("Kenny", "55", "Tokyo");
@@ -303,7 +336,10 @@ class Program
         var headers = new List<string>();
         for (var columnPos = 1; columnPos <= columnCount; columnPos++)
         {
-            headers.Add($"Header {columnPos}");
+            if (columnPos % 2 == 0)
+                headers.Add($"Header {columnPos}");
+            else
+                headers.Add($"MultiLine{Environment.NewLine}Header {columnPos}");
         }
         table.Headers = headers.ToArray();
 
@@ -313,7 +349,10 @@ class Program
             var row = new string[columnCount];
             for (var columnPos = 1; columnPos <= columnCount; columnPos++)
             {
-                row[columnPos - 1] = $"Row {rowPos} -> Column {columnPos}";
+                if (columnPos % 2 == 0)
+                    row[columnPos - 1] = $"Row {rowPos} -> Column {columnPos}";
+                else
+                    row[columnPos - 1] = $"Row {rowPos}{Environment.NewLine}Column {columnPos}";
             }
             rows.Add(row);
         }
@@ -322,7 +361,10 @@ class Program
         var footers = new List<string>();
         for (var columnPos = 1; columnPos <= columnCount; columnPos++)
         {
-            footers.Add($"Footer {columnPos}");
+            if (columnPos % 2 == 0)
+                footers.Add($"Footer {columnPos}");
+            else
+                footers.Add($"Footer{Environment.NewLine}{columnPos}");
         }
         table.Footers = footers.ToArray();
 
