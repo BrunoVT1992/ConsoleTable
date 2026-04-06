@@ -10,18 +10,6 @@ class Program
         Console.WriteLine();
         Console.WriteLine();
 
-        var table = new Table
-        {
-            Rows = new List<string[]>
-            {
-                new[] { "" },
-                Array.Empty<string>()
-            }
-        };
-
-        Console.WriteLine("Table with empty row and empty column:");
-        Console.WriteLine(table.ToTable());
-
         WriteDefaultTable();
 
         WriteDefaultTableWithProperties();
@@ -50,7 +38,9 @@ class Program
 
         WriteTableFluent();
 
-        WriteMultiLineTable();
+        WriteMultiLineTable(false);
+
+        WriteMultiLineTable(true);
 
         WriteTableWithoutBorders();
 
@@ -88,17 +78,18 @@ class Program
         Console.WriteLine();
     }
 
-    private static void WriteMultiLineTable()
+    private static void WriteMultiLineTable(bool textAlignRight)
     {
         Console.WriteLine();
         Console.WriteLine("Multi line table:");
+        Console.WriteLine("Text align " + (textAlignRight ? "right" : "left"));
 
         // Setup the table
         var table = new Table
         {
-            RowTextAlignmentRight = false,
-            HeaderTextAlignmentRight = false,
-            FooterTextAlignmentRight = false,
+            RowTextAlignmentRight = textAlignRight,
+            HeaderTextAlignmentRight = textAlignRight,
+            FooterTextAlignmentRight = textAlignRight,
             Padding = 2,
             Headers = new string[] { "Name", $"Age{Environment.NewLine}&{Environment.NewLine}Birthyear", "City" },
             Rows = new List<string[]>
