@@ -262,7 +262,7 @@ namespace ConsoleTable.Text
 
                 previousRowColumnCount = headerColumnCount;
 
-                //When there are no rows immediatly draw the bottom line after the header
+                //When there are no rows immediately draw the bottom line after the header
                 if (Rows?.Any() == true)
                 {
                     nextRowColumnCount = GetColumnCount(Rows.First());
